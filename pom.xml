@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring.oauth2.autoconfigure.version>2.1.1.RELEASE</spring.oauth2.autoconfigure.version>
     </properties>
 
     <dependencies>
@@ -77,6 +78,21 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Oauth2 -->
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring.oauth2.autoconfigure.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: haust
+  profiles:
+    active: dev
+  flyway:
+    enabled: false
+  security:
+    oauth2:
+      client:
+        provider:
+          facebook:
+            user-info-uri: https://graph.facebook.com/me?fields=email,picture,first_name,last_name
+        registration:
+          facebook:
+            client-id: 2251096658440248
+            client-secret: 1ceb6c9e67c76caf269170e3eb0cb7d4
+            provider: facebook
+            scope: email
+          google:
+            client-id: 575651097525-k1r7mad1tok31f1tfgdt9mb825p9700o.apps.googleusercontent.com
+            client-secret: 0z9eArnqEPWLr8W6CfJ-g2Lx
+            provider: google
