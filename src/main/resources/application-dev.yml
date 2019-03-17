@@ -1,0 +1,27 @@
+spring:
+  # Data Source - embedded H2
+  datasource:
+    url: jdbc:h2:mem:~/venus
+    username: sa
+    password:
+
+  # H2 console config
+  h2:
+    console:
+      enabled: true
+      path: /console/
+
+  # enable hibernate db init
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  # disable flyway
+  flyway:
+    enabled:  false
+
+# logging
+logging:
+  level:
+    org.springframework.security: DEBUG
