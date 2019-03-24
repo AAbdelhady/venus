@@ -25,11 +25,17 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class User extends BaseEntity {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "users_seq_generator")
     @SequenceGenerator(name = "users_seq_generator", sequenceName = "users_seq")
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 }
