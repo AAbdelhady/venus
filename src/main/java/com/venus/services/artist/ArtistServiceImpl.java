@@ -33,7 +33,6 @@ public class ArtistServiceImpl implements ArtistService {
     public ArtistResponse createArtist(ArtistRequest artistRequest) {
         User user = userRepository.findAll().get(0); // find logged in
         Artist artist = artistMapper.toArtist(artistRequest);
-        artist.setId(user.getId());
         artist.setUser(user);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
