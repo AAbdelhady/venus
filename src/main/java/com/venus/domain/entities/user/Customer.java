@@ -13,5 +13,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 //@AllArgsConstructor
-public class Customer extends AbstractUserEntity {
+public class Customer extends AbstractExtendedUser {
 }

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Artist extends AbstractUserEntity {
+public class Artist extends AbstractExtendedUser {
 
     @Column(name = "active")
     private boolean active;

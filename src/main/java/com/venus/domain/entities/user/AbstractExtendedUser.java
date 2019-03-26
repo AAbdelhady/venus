@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @MappedSuperclass
 @Getter
-public class AbstractUserEntity {
+public abstract class AbstractExtendedUser {
 
     @Id
     @Column(name = "user_id")
