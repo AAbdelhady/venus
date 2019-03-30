@@ -6,11 +6,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.venus.config.security.SocialAuthenticationSuccessHandler;
+import com.venus.config.security.TokenAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,16 +21,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AuthenticationEntryPoint authenticationEntryPoint;
 
-    private LogoutSuccessHandler logoutSuccessHandler;
-
     private AuthenticationSuccessHandler socialAuthenticationSuccessHandler;
 
+    private TokenAuthenticationFilter tokenAuthenticationFilter;
+
     @Autowired
-    public SecurityConfig(AuthenticationEntryPoint authenticationEntryPoint, LogoutSuccessHandler logoutSuccessHandler,
-                          SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler) {
+    public SecurityConfig(AuthenticationEntryPoint authenticationEntryPoint, SocialAuthenticationSuccessHandler socialAuthenticationSuccessHandler,
+                          TokenAuthenticationFilter tokenAuthenticationFilter) {
         this.authenticationEntryPoint = authenticationEntryPoint;
-        this.logoutSuccessHandler = logoutSuccessHandler;
         this.socialAuthenticationSuccessHandler = socialAuthenticationSuccessHandler;
+        this.tokenAuthenticationFilter = tokenAuthenticationFilter;
     }
 
     @Override
@@ -37,7 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatcher("/**")
                 .cors()
                 .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
+                .antMatchers("/api/test/secure").authenticated()
                 .antMatchers("/api/test").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .and()
@@ -47,13 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessHandler(logoutSuccessHandler)
-                .invalidateHttpSession(true)
-                .and()
                 .csrf()
-                .disable();
+                .disable()
+                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 }

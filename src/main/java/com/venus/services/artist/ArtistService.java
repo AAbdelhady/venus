@@ -8,4 +8,5 @@ public interface ArtistService {
     ArtistResponse createArtist(ArtistRequest artistRequest);
 
     ArtistResponse findArtistById(Long id);
+
 }

@@ -37,4 +37,10 @@ public class ArtistServiceImpl implements ArtistService {
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
+
+    @Override
+    public ArtistResponse findArtistById(Long id) {
+        Artist artist = artistRepository.findByUser_Id(id).orElseThrow(IllegalArgumentException::new);
+        return artistMapper.toDto(artist);
+    }
 }

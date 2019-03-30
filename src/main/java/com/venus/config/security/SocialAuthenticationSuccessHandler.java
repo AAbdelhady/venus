@@ -1,5 +1,6 @@
 package com.venus.config.security;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,26 +20,29 @@ import com.venus.domain.entities.user.User;
 import com.venus.domain.enums.AuthProvider;
 import com.venus.domain.enums.Role;
 import com.venus.repositories.UserRepository;
-import com.venus.services.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static com.venus.config.security.SecurityUtil.JWT_HEADER_NAME;
+import static com.venus.config.security.SecurityUtil.JWT_TTL_HEADER_NAME;
+import static com.venus.config.security.SecurityUtil.JWT_TTL_SECONDS;
 
 @Component
 @Slf4j
 public class SocialAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final UserService userService;
-
     private final UserRepository userRepository;
 
+    private final TokenProvider tokenProvider;
+
     @Autowired
-    public SocialAuthenticationSuccessHandler(UserService userService, UserRepository userRepository) {
-        this.userService = userService;
+    public SocialAuthenticationSuccessHandler(UserRepository userRepository, TokenProvider tokenProvider) {
         this.userRepository = userRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         SocialUserDetails details = getSocialUserDetails(authentication);
 
         Optional<User> userOptional = userRepository.findOneByLoginId(details.getLoginId());
@@ -50,16 +54,24 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
             loggedInUser = registerNewSocialLoginUser(details);
         UserAuthenticationUtil.updateCurrentUserContext(loggedInUser);
 
-        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        String token = tokenProvider.createToken(loggedInUser);
+
+        CookieUtil.addCookie(response, CookieUtil.JWT_COOKIE, token, JWT_TTL_SECONDS); // for webapps
+        response.setHeader(JWT_HEADER_NAME, token); // for mobile clients
+        response.setHeader(JWT_TTL_HEADER_NAME, String.valueOf(JWT_TTL_SECONDS));
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        /*RedirectStrategy strategy = new DefaultRedirectStrategy();
+        strategy.sendRedirect(request, response, "http://localhost:8080?token="+token+"&id="+loggedInUser.getId());*/
     }
 
     private SocialUserDetails getSocialUserDetails(Authentication authentication) {
         Map<String, Object> socialDetailsMap = ((OAuth2User) authentication.getPrincipal()).getAttributes();
         String socialLoginProviderName = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
         switch (AuthProvider.valueOf(socialLoginProviderName)) {
-            case FACEBOOK:
+            case facebook:
                 return addDataFromFacebook(socialDetailsMap);
-            case GOOGLE:
+            case google:
                 return addDataFromGoogle(socialDetailsMap);
         }
         throw new IllegalArgumentException();
@@ -83,12 +95,12 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
                 .email(details.getEmail())
                 .profilePictureUrl(details.getProfilePictureUrl())
                 .build();
-        return userService.saveUser(user);
+        return userRepository.save(user);
     }
 
     private SocialUserDetails addDataFromFacebook(Map<String, Object> socialDetailsMap) {
         SocialUserDetails details = new SocialUserDetails();
-        details.setAuthProvider(AuthProvider.FACEBOOK);
+        details.setAuthProvider(AuthProvider.facebook);
         details.setLoginId((String) socialDetailsMap.get("id"));
         details.setFirstName((String) socialDetailsMap.get("first_name"));
         details.setLastName((String) socialDetailsMap.get("last_name"));
@@ -99,7 +111,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private SocialUserDetails addDataFromGoogle(Map<String, Object> socialDetailsMap) {
         SocialUserDetails details = new SocialUserDetails();
-        details.setAuthProvider(AuthProvider.GOOGLE);
+        details.setAuthProvider(AuthProvider.google);
         details.setLoginId((String) socialDetailsMap.get("sub"));
         details.setFirstName((String) socialDetailsMap.get("given_name"));
         details.setLastName((String) socialDetailsMap.get("family_name"));
