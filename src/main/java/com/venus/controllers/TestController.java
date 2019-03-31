@@ -2,20 +2,23 @@ package com.venus.controllers;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.venus.domain.dtos.user.UserResponse;
-import com.venus.services.user.UserService;
+import com.venus.domain.dtos.Artist.ArtistRequest;
+import com.venus.domain.exceptions.ForbiddenException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("api/test")
+@Slf4j
 public class TestController {
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public String test() {
@@ -27,8 +30,18 @@ public class TestController {
         return new Date().toString();
     }
 
-    @GetMapping("me")
-    public UserResponse testMe() {
-        return userService.findAuthorizedUser();
+    @GetMapping("error/400")
+    public void error400() {
+        throw new IllegalArgumentException("Some Illegal Argument Exception Message!");
+    }
+
+    @PostMapping("error/args")
+    public void errorArgs(@RequestBody @Valid ArtistRequest request) {
+        log.info(request.toString());
+    }
+
+    @GetMapping("error/403")
+    public void error403() {
+        throw new ForbiddenException("Some Forbidden Exception Message!");
     }
 }
