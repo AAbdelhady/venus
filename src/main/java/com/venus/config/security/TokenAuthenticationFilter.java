@@ -46,7 +46,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             jwtOptional.ifPresent(jwt -> {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
                 User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
-                UserAuthenticationUtil.updateCurrentUserContext(user);
+                SecurityUtil.updateCurrentUserContext(user);
             });
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token", ex);
@@ -60,15 +60,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    /*private Optional<String> getJwtFromRequest(HttpServletRequest request) {
-        Optional<Cookie> jwtCookie = CookieUtil.getCookie(request, CookieUtil.JWT_COOKIE);
-        return jwtCookie.map(Cookie::getValue);
-    }*/
-
     private Optional<String> getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTH_HEADER_NAME);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX))
             return Optional.of(bearerToken.substring(TOKEN_PREFIX.length()));
         return Optional.empty();
     }
+
+    // should be used with webapps instead of headers
+    /*private Optional<String> getJwtFromRequest(HttpServletRequest request) {
+        Optional<Cookie> jwtCookie = CookieUtil.getCookie(request, CookieUtil.JWT_COOKIE);
+        return jwtCookie.map(Cookie::getValue);
+    }*/
 }

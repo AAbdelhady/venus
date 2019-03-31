@@ -8,7 +8,7 @@ import com.venus.domain.entities.user.User;
 import com.venus.domain.mappers.UserMapper;
 import com.venus.repositories.UserRepository;
 
-import static com.venus.config.security.UserAuthenticationUtil.getCurrentUserId;
+import static com.venus.config.security.SecurityUtil.getCurrentUserId;
 
 @Service
 public class UserServiceImpl implements UserService {

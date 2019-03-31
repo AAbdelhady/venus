@@ -52,7 +52,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
             loggedInUser = updateExistingSocialLoginUser(userOptional.get(), details);
         else
             loggedInUser = registerNewSocialLoginUser(details);
-        UserAuthenticationUtil.updateCurrentUserContext(loggedInUser);
+        SecurityUtil.updateCurrentUserContext(loggedInUser);
 
         String token = tokenProvider.createToken(loggedInUser);
 
