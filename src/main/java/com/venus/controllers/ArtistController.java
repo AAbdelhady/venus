@@ -10,8 +10,10 @@ import com.venus.domain.dtos.Artist.ArtistResponse;
 import com.venus.services.artist.ArtistService;
 
 @RestController
-@RequestMapping("/api/artist")
+@RequestMapping(ArtistController.URL)
 public class ArtistController {
+
+    static final String URL = "/api/artist";
 
     private final ArtistService artistService;
 

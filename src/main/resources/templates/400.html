@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bad Request - 400</title>
+</head>
+<body>
+<h1>Bad Request - 400</h1>
+<p th:if="${exceptionMessage != null}" th:text="${exceptionMessage}">Invalid Arguments Provided</p>
+<ul th:if="${validationErrors != null && !validationErrors.isEmpty()}">
+    <li th:each="err : ${validationErrors}" th:text="|${err.field} ${err.defaultMessage}|"></li>
+</ul>
+</body>
+</html>
