@@ -21,6 +21,7 @@
         <hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
         <jpamodelgen.version>5.4.2.Final</jpamodelgen.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <jjwt.version>0.10.5</jjwt.version>
     </properties>
 
     <dependencies>
@@ -130,6 +131,25 @@
             <artifactId>hibernate-jpamodelgen</artifactId>
             <version>${jpamodelgen.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- JWT -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Test -->

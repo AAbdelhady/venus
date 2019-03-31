@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -64,9 +63,6 @@ public class User extends BaseEntity {
     @Column(name = "auth_provider", nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
-
-    @OneToOne(mappedBy = "user")
-    private AbstractExtendedUser extendedUser;
 
     @Column(name = "profile_picture_url")
     private String profilePictureUrl;
