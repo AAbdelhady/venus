@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.venus.domain.dtos.user.UserResponse;
+import com.venus.domain.mappers.UserMapper;
 import com.venus.services.user.UserService;
 
 @RestController
@@ -20,14 +21,17 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserMapper userMapper;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping("me")
     public ResponseEntity<UserResponse> me() {
-        UserResponse userResponse = userService.findAuthorizedUser();
+        UserResponse userResponse = userMapper.toDto(userService.findAuthorizedUser());
         return ResponseEntity.ok().cacheControl(CacheControl.maxAge(24, TimeUnit.HOURS)).body(userResponse);
     }
 }

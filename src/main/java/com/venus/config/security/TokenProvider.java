@@ -38,7 +38,7 @@ public class TokenProvider {
 
         return Jwts.builder()
                 .setSubject(Long.toString(user.getId()))
-                .setIssuedAt(new Date())
+                .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key)
                 .compact();

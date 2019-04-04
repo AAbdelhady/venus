@@ -10,28 +10,28 @@ import com.venus.domain.entities.user.Artist;
 import com.venus.domain.entities.user.User;
 import com.venus.domain.mappers.ArtistMapper;
 import com.venus.repositories.ArtistRepository;
-import com.venus.repositories.UserRepository;
+import com.venus.services.user.UserService;
 
 @Service
 @Transactional
 public class ArtistServiceImpl implements ArtistService {
 
-    private final ArtistRepository artistRepository;
+    private final UserService userService;
 
-    private final UserRepository userRepository;
+    private final ArtistRepository artistRepository;
 
     private final ArtistMapper artistMapper;
 
     @Autowired
-    public ArtistServiceImpl(ArtistRepository artistRepository, UserRepository userRepository, ArtistMapper artistMapper) {
+    public ArtistServiceImpl(UserService userService, ArtistRepository artistRepository, ArtistMapper artistMapper) {
+        this.userService = userService;
         this.artistRepository = artistRepository;
-        this.userRepository = userRepository;
         this.artistMapper = artistMapper;
     }
 
     @Override
     public ArtistResponse createArtist(ArtistRequest artistRequest) {
-        User user = userRepository.findAll().get(0); // find logged in
+        User user = userService.findAuthorizedUser();
         Artist artist = artistMapper.toArtist(artistRequest);
         artist.setUser(user);
         artist = artistRepository.save(artist);

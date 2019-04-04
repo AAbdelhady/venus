@@ -48,10 +48,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
                 SecurityUtil.updateCurrentUserContext(user);
             });
+        } catch (ExpiredJwtException ex) {
+            handleExpiredJwtException(ex);
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token", ex);
-        } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token", ex);
         } catch (UnsupportedJwtException ex) {
             log.error("Unsupported JWT token", ex);
         } catch (IllegalArgumentException ex) {
@@ -72,4 +72,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         Optional<Cookie> jwtCookie = CookieUtil.getCookie(request, CookieUtil.JWT_COOKIE);
         return jwtCookie.map(Cookie::getValue);
     }*/
+
+    private void handleExpiredJwtException(ExpiredJwtException ex) {
+        String userId = ex.getClaims().getSubject();
+        String expirationDt = ex.getClaims().getExpiration().toInstant().toString();
+        log.warn("JWT for user with id [{}] expired at {}", userId, expirationDt);
+    }
 }

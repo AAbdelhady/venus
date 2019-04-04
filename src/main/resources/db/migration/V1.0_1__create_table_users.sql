@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS users
   CONSTRAINT users_login_id_unique UNIQUE (login_id)
 );
 CREATE SEQUENCE IF NOT EXISTS users_seq;
-CREATE UNIQUE INDEX IF NOT EXISTS users_id_uindex ON users (id);
 CREATE UNIQUE INDEX IF NOT EXISTS users_login_id_uindex ON users (login_id);
 CREATE INDEX IF NOT EXISTS users_modified_index ON users (modified);
 
