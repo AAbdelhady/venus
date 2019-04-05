@@ -4,7 +4,5 @@ import com.venus.domain.entities.user.User;
 
 public interface UserService {
 
-    User saveUser(User user);
-
     User findAuthorizedUser();
 }

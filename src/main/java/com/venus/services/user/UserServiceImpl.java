@@ -19,11 +19,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
     public User findAuthorizedUser() {
         Long authorizedUserId = getCurrentUserId().orElseThrow(IllegalArgumentException::new);
         return userRepository.findById(authorizedUserId).orElseThrow(IllegalArgumentException::new);
