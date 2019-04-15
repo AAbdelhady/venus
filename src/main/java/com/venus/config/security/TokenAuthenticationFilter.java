@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +43,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            Optional<String> jwtOptional = getJwtFromRequest(request);
+            Optional<String> jwtOptional = getJwtFromCookie(request);
+            if (!jwtOptional.isPresent())
+                jwtOptional = getJwtFromHeader(request);
             jwtOptional.ifPresent(jwt -> {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
                 User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
@@ -60,18 +63,17 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private Optional<String> getJwtFromRequest(HttpServletRequest request) {
+    private Optional<String> getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTH_HEADER_NAME);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX))
             return Optional.of(bearerToken.substring(TOKEN_PREFIX.length()));
         return Optional.empty();
     }
 
-    // should be used with webapps instead of headers
-    /*private Optional<String> getJwtFromRequest(HttpServletRequest request) {
+    private Optional<String> getJwtFromCookie(HttpServletRequest request) {
         Optional<Cookie> jwtCookie = CookieUtil.getCookie(request, CookieUtil.JWT_COOKIE);
         return jwtCookie.map(Cookie::getValue);
-    }*/
+    }
 
     private void handleExpiredJwtException(ExpiredJwtException ex) {
         String userId = ex.getClaims().getSubject();
