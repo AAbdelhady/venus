@@ -1,9 +1,13 @@
 package com.venus.controllers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,5 +47,11 @@ public class TestController {
     @GetMapping("error/403")
     public void error403() {
         throw new ForbiddenException("Some Forbidden Exception Message!");
+    }
+
+    @GetMapping("redirect")
+    public ResponseEntity redirect() throws URISyntaxException {
+        URI uri = new URI("https://www.google.com");
+        return ResponseEntity.status(HttpStatus.SEE_OTHER).location(uri).build();
     }
 }

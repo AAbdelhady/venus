@@ -24,7 +24,7 @@ public class SecurityUtil {
         return auth != null && auth.getPrincipal() != null ? Optional.of(Long.parseLong(auth.getPrincipal().toString())) : Optional.empty();
     }
 
-    public static void updateCurrentUserContext(User user) {
+    static void updateCurrentUserContext(User user) {
         List<GrantedAuthority> updatedAuthorities = AuthorityUtils.createAuthorityList(user.getRole().getAuthority());
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(user.getId(), null, updatedAuthorities);
         SecurityContextHolder.getContext().setAuthentication(newAuth);

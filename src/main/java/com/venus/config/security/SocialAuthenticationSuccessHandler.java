@@ -9,9 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +34,14 @@ import static com.venus.config.security.SecurityUtil.JWT_TTL_SECONDS;
 @Slf4j
 public class SocialAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+    private static final String REDIRECT_PAGE = "/redirect";
+
     private final UserRepository userRepository;
 
     private final TokenProvider tokenProvider;
+
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
 
     @Autowired
     public SocialAuthenticationSuccessHandler(UserRepository userRepository, TokenProvider tokenProvider) {
@@ -61,8 +69,8 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setHeader(JWT_TTL_HEADER_NAME, String.valueOf(JWT_TTL_SECONDS));
         response.setStatus(HttpServletResponse.SC_OK);
 
-        /*RedirectStrategy strategy = new DefaultRedirectStrategy();
-        strategy.sendRedirect(request, response, "http://localhost:8080?token="+token+"&id="+loggedInUser.getId());*/
+        RedirectStrategy strategy = new DefaultRedirectStrategy();
+        strategy.sendRedirect(request, response, frontendBaseUrl + REDIRECT_PAGE);
     }
 
     private SocialUserDetails getSocialUserDetails(Authentication authentication) {

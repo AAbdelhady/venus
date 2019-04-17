@@ -10,4 +10,9 @@ public class IndexController {
     public String index() {
         return "index";
     }
+
+    @GetMapping("redirect")
+    public String redirect() {
+        return "redirect";
+    }
 }
