@@ -16,7 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.venus.config.security.SecurityUtil.JWT_TTL_SECONDS;
+import static com.venus.config.security.utils.SecurityUtil.JWT_TTL_SECONDS;
 
 @Component
 @Slf4j

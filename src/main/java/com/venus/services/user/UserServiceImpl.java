@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.venus.domain.entities.user.User;
 import com.venus.repositories.UserRepository;
 
-import static com.venus.config.security.SecurityUtil.getCurrentUserId;
+import static com.venus.config.security.utils.SecurityUtil.getCurrentUserId;
 
 @Service
 public class UserServiceImpl implements UserService {

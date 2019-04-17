@@ -22,6 +22,7 @@
         <jpamodelgen.version>5.4.2.Final</jpamodelgen.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <jjwt.version>0.10.5</jjwt.version>
+        <powermock.version>2.0.0</powermock.version>
     </properties>
 
     <dependencies>
@@ -161,6 +162,21 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- PowerMock -->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
 

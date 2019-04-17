@@ -1,7 +1,6 @@
 package com.venus.config.security;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,6 +17,8 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.venus.config.security.utils.CookieUtil;
+import com.venus.config.security.utils.SecurityUtil;
 import com.venus.domain.SocialUserDetails;
 import com.venus.domain.entities.user.User;
 import com.venus.domain.enums.AuthProvider;
@@ -26,9 +27,11 @@ import com.venus.repositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static com.venus.config.security.SecurityUtil.JWT_HEADER_NAME;
-import static com.venus.config.security.SecurityUtil.JWT_TTL_HEADER_NAME;
-import static com.venus.config.security.SecurityUtil.JWT_TTL_SECONDS;
+import static com.venus.config.security.utils.SecurityUtil.JWT_HEADER_NAME;
+import static com.venus.config.security.utils.SecurityUtil.JWT_TTL_HEADER_NAME;
+import static com.venus.config.security.utils.SecurityUtil.JWT_TTL_SECONDS;
+import static com.venus.config.security.utils.SocialUserDetailsUtil.parseFacebookUserDetails;
+import static com.venus.config.security.utils.SocialUserDetailsUtil.parseGoogleUserDetails;
 
 @Component
 @Slf4j
@@ -52,22 +55,14 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         SocialUserDetails details = getSocialUserDetails(authentication);
-
         Optional<User> userOptional = userRepository.findOneByLoginId(details.getLoginId());
-
-        User loggedInUser;
-        if (userOptional.isPresent())
-            loggedInUser = updateExistingSocialLoginUser(userOptional.get(), details);
-        else
-            loggedInUser = registerNewSocialLoginUser(details);
+        User loggedInUser = userOptional.isPresent() ? updateExistingSocialLoginUser(userOptional.get(), details) : registerNewSocialLoginUser(details);
         SecurityUtil.updateCurrentUserContext(loggedInUser);
 
         String token = tokenProvider.createToken(loggedInUser);
-
         CookieUtil.addCookie(response, CookieUtil.JWT_COOKIE, token, JWT_TTL_SECONDS); // for webapps
         response.setHeader(JWT_HEADER_NAME, token); // for mobile clients
         response.setHeader(JWT_TTL_HEADER_NAME, String.valueOf(JWT_TTL_SECONDS));
-        response.setStatus(HttpServletResponse.SC_OK);
 
         RedirectStrategy strategy = new DefaultRedirectStrategy();
         strategy.sendRedirect(request, response, frontendBaseUrl + REDIRECT_PAGE);
@@ -78,9 +73,9 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         String socialLoginProviderName = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
         switch (AuthProvider.valueOf(socialLoginProviderName)) {
             case facebook:
-                return addDataFromFacebook(socialDetailsMap);
+                return parseFacebookUserDetails(socialDetailsMap);
             case google:
-                return addDataFromGoogle(socialDetailsMap);
+                return parseGoogleUserDetails(socialDetailsMap);
         }
         throw new IllegalArgumentException();
     }
@@ -104,27 +99,5 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
                 .profilePictureUrl(details.getProfilePictureUrl())
                 .build();
         return userRepository.save(user);
-    }
-
-    private SocialUserDetails addDataFromFacebook(Map<String, Object> socialDetailsMap) {
-        SocialUserDetails details = new SocialUserDetails();
-        details.setAuthProvider(AuthProvider.facebook);
-        details.setLoginId((String) socialDetailsMap.get("id"));
-        details.setFirstName((String) socialDetailsMap.get("first_name"));
-        details.setLastName((String) socialDetailsMap.get("last_name"));
-        details.setEmail((String) socialDetailsMap.get("email"));
-        details.setProfilePictureUrl((String) (((LinkedHashMap) ((LinkedHashMap) socialDetailsMap.get("picture")).get("data"))).get("url"));
-        return details;
-    }
-
-    private SocialUserDetails addDataFromGoogle(Map<String, Object> socialDetailsMap) {
-        SocialUserDetails details = new SocialUserDetails();
-        details.setAuthProvider(AuthProvider.google);
-        details.setLoginId((String) socialDetailsMap.get("sub"));
-        details.setFirstName((String) socialDetailsMap.get("given_name"));
-        details.setLastName((String) socialDetailsMap.get("family_name"));
-        details.setEmail((String) socialDetailsMap.get("email"));
-        details.setProfilePictureUrl((String) socialDetailsMap.get("picture"));
-        return details;
     }
 }

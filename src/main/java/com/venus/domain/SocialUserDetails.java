@@ -2,9 +2,11 @@ package com.venus.domain;
 
 import com.venus.domain.enums.AuthProvider;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class SocialUserDetails {
     private String loginId;
     private String firstName;

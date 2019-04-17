@@ -1,4 +1,4 @@
-package com.venus.config.security;
+package com.venus.config.security.utils;
 
 import java.util.Optional;
 
@@ -6,11 +6,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-class CookieUtil {
+public class CookieUtil {
 
-    static final String JWT_COOKIE = "jwt";
+    public static final String JWT_COOKIE = "JWT";
 
-    static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
+    public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
@@ -21,7 +21,7 @@ class CookieUtil {
         return Optional.empty();
     }
 
-    static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
