@@ -30,8 +30,8 @@ public class TestController {
     }
 
     @GetMapping("secure")
-    public String testSecured() {
-        return new Date().toString();
+    public Date testSecured() {
+        return new Date();
     }
 
     @GetMapping("error/400")

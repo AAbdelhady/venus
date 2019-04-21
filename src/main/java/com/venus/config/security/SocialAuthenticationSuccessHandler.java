@@ -46,6 +46,9 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     @Value("${frontend.base-url}")
     private String frontendBaseUrl;
 
+    @Value("${server.secured:false}")
+    private boolean isHttps;
+
     @Autowired
     public SocialAuthenticationSuccessHandler(UserRepository userRepository, TokenProvider tokenProvider) {
         this.userRepository = userRepository;
@@ -60,7 +63,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         SecurityUtil.updateCurrentUserContext(loggedInUser);
 
         String token = tokenProvider.createToken(loggedInUser);
-        CookieUtil.addCookie(response, CookieUtil.JWT_COOKIE, token, JWT_TTL_SECONDS); // for webapps
+        CookieUtil.addCookie(response, CookieUtil.JWT_COOKIE, token, JWT_TTL_SECONDS, true, isHttps); // for webapps
         response.setHeader(JWT_HEADER_NAME, token); // for mobile clients
         response.setHeader(JWT_TTL_HEADER_NAME, String.valueOf(JWT_TTL_SECONDS));
 

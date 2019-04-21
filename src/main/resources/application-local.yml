@@ -14,4 +14,4 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 frontend:
-  base-url: http://localhost:8080
+  base-url: http://localhost:4200
