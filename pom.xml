@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.venus</groupId>
     <artifactId>venus</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Venus</name>
     <description>Venus API Server</description>
 
@@ -228,7 +228,7 @@
 
     <scm>
         <developerConnection>scm:git:https://aabdelhady@bitbucket.org/aabdelhady/venus.git</developerConnection>
-        <tag>venus-0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
 </project>
