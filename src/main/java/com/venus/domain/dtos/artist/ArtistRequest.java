@@ -1,4 +1,4 @@
-package com.venus.domain.dtos.Artist;
+package com.venus.domain.dtos.artist;
 
 import javax.validation.constraints.NotBlank;
 

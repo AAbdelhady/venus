@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 
-import com.venus.domain.dtos.Artist.ArtistResponse;
+import com.venus.domain.dtos.artist.ArtistResponse;
 import com.venus.services.artist.ArtistService;
 
 import static org.mockito.BDDMockito.given;

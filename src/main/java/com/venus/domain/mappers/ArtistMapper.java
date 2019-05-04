@@ -3,8 +3,8 @@ package com.venus.domain.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.venus.domain.dtos.Artist.ArtistRequest;
-import com.venus.domain.dtos.Artist.ArtistResponse;
+import com.venus.domain.dtos.artist.ArtistRequest;
+import com.venus.domain.dtos.artist.ArtistResponse;
 import com.venus.domain.entities.user.Artist;
 
 @Mapper(componentModel = "spring")

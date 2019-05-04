@@ -1,7 +1,7 @@
 package com.venus.services.artist;
 
-import com.venus.domain.dtos.Artist.ArtistRequest;
-import com.venus.domain.dtos.Artist.ArtistResponse;
+import com.venus.domain.dtos.artist.ArtistRequest;
+import com.venus.domain.dtos.artist.ArtistResponse;
 
 public interface ArtistService {
 

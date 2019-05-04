@@ -1,11 +1,11 @@
-package com.venus.domain.dtos.Artist;
+package com.venus.domain.dtos.booking;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
 @Data
-public class ArtistResponse {
+public class BookingResponse {
 
     @JsonProperty("id")
     private Long id;
