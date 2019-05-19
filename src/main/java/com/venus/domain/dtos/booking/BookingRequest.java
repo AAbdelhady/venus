@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class BookingRequest {
 
-    @JsonProperty("customer_id")
+    @JsonProperty("customerId")
     @NotBlank
     private Long customerId;
 
-    @JsonProperty("artist_id")
+    @JsonProperty("artistId")
     @NotBlank
     private Long artistId;
 

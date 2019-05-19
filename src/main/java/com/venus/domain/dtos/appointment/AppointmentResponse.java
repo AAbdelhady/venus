@@ -1,4 +1,6 @@
-package com.venus.domain.dtos.booking;
+package com.venus.domain.dtos.appointment;
+
+import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +11,7 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookingResponse {
+public class AppointmentResponse {
 
     @JsonProperty("id")
     private Long id;
@@ -20,6 +22,6 @@ public class BookingResponse {
     @JsonProperty("artist")
     private ArtistResponse artist;
 
-    @JsonProperty("message")
-    private String message;
+    @JsonProperty("appointmentTime")
+    private OffsetDateTime appointmentTime;
 }
