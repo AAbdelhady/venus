@@ -2,6 +2,7 @@ package com.venus.services.booking;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.venus.domain.dtos.booking.BookingRequest;
 import com.venus.domain.dtos.booking.BookingResponse;
@@ -14,6 +15,7 @@ import com.venus.repositories.BookingRepository;
 import com.venus.repositories.CustomerRepository;
 
 @Service
+@Transactional
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;

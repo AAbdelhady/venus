@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.venus.domain.dtos.appointment.AppointmentRequest;
 import com.venus.domain.dtos.appointment.AppointmentResponse;
@@ -17,7 +18,10 @@ import com.venus.domain.entities.Booking;
 import com.venus.domain.entities.user.Artist;
 import com.venus.domain.entities.user.Customer;
 import com.venus.domain.entities.user.User;
+import com.venus.domain.mappers.AppointmentMapper;
 import com.venus.domain.mappers.AppointmentMapperImpl;
+import com.venus.domain.mappers.ArtistMapperImpl;
+import com.venus.domain.mappers.CustomerMapperImpl;
 import com.venus.repositories.AppointmentRepository;
 import com.venus.repositories.BookingRepository;
 
@@ -43,7 +47,10 @@ public class AppointmentServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new AppointmentServiceImpl(appointmentRepository, bookingRepository, new AppointmentMapperImpl());
+        AppointmentMapper appointmentMapper = new AppointmentMapperImpl();
+        ReflectionTestUtils.setField(appointmentMapper, "artistMapper", new ArtistMapperImpl());
+        ReflectionTestUtils.setField(appointmentMapper, "customerMapper", new CustomerMapperImpl());
+        service = new AppointmentServiceImpl(appointmentRepository, bookingRepository, appointmentMapper);
     }
 
     @Test
@@ -69,7 +76,7 @@ public class AppointmentServiceImplTest {
         booking.setCustomer(customer);
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
 
-        when(appointmentRepository.save(isA(Appointment.class))).then(saveAnswer());
+        when(appointmentRepository.save(isA(Appointment.class))).then(saveAppointmentAnswer());
 
         OffsetDateTime appointmentTime = OffsetDateTime.now();
 
@@ -99,7 +106,7 @@ public class AppointmentServiceImplTest {
     public void createAppointmentTest_bookingNotExist() {
         // given
         final long bookingId = 1L;
-        when(bookingRepository.findById(bookingId)).thenThrow(new IllegalArgumentException());
+        when(bookingRepository.findById(bookingId)).thenReturn(Optional.empty());
 
         // when
         service.createAppointment(new AppointmentRequest());
@@ -109,7 +116,7 @@ public class AppointmentServiceImplTest {
         verify(appointmentRepository, never()).save(isA(Appointment.class));
     }
 
-    private Answer<Appointment> saveAnswer() {
+    private Answer<Appointment> saveAppointmentAnswer() {
         return invocation -> (Appointment) invocation.getArguments()[0];
     }
 }

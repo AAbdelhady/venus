@@ -6,7 +6,7 @@ import com.venus.domain.dtos.appointment.AppointmentRequest;
 import com.venus.domain.dtos.appointment.AppointmentResponse;
 import com.venus.domain.entities.Appointment;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ArtistMapper.class, CustomerMapper.class})
 public interface AppointmentMapper {
 
     AppointmentResponse toDto(Appointment entity);
