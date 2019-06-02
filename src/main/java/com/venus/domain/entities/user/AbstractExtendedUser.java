@@ -1,27 +1,24 @@
 package com.venus.domain.entities.user;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @MappedSuperclass
 @Getter
-public abstract class AbstractExtendedUser {
+abstract class AbstractExtendedUser {
 
     @Id
-    @Column(name = "user_id")
     private Long id;
 
     @OneToOne(optional = false, orphanRemoval = true)
-    @PrimaryKeyJoinColumn(name = "user_id", referencedColumnName = "id")
+    @MapsId
+    @JoinColumn(name = "user_id")
+    @Setter
     private User user;
-
-    public void setUser(User user) {
-        this.id = user.getId();
-        this.user = user;
-    }
 }

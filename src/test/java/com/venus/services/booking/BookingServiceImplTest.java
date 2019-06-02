@@ -44,7 +44,7 @@ public class BookingServiceImplTest {
     private CustomerRepository customerRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         BookingMapper bookingMapper = new BookingMapperImpl();
         ReflectionTestUtils.setField(bookingMapper, "artistMapper", new ArtistMapperImpl());
@@ -126,7 +126,7 @@ public class BookingServiceImplTest {
         artist.setUser(artistUser);
         when(artistRepository.findById(artistId)).thenReturn(Optional.of(artist));
 
-        when(customerRepository.findById(customerId)).thenReturn(Optional.ofNullable(null));
+        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         BookingRequest request = new BookingRequest();
         request.setArtistId(artistId);

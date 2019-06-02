@@ -45,7 +45,7 @@ public class AppointmentServiceImplTest {
     private BookingRepository bookingRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         AppointmentMapper appointmentMapper = new AppointmentMapperImpl();
         ReflectionTestUtils.setField(appointmentMapper, "artistMapper", new ArtistMapperImpl());
