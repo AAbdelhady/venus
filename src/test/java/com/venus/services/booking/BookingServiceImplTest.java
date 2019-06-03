@@ -62,12 +62,14 @@ public class BookingServiceImplTest {
         User artistUser = new User();
         artistUser.setId(artistId);
         Artist artist = new Artist();
+        ReflectionTestUtils.setField(artist, "id", artistId);
         artist.setUser(artistUser);
         when(artistRepository.findById(artistId)).thenReturn(Optional.of(artist));
 
         User customerUser = new User();
         customerUser.setId(customerId);
         Customer customer = new Customer();
+        ReflectionTestUtils.setField(customer, "id", customerId);
         customer.setUser(customerUser);
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
 

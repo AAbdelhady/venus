@@ -63,11 +63,13 @@ public class AppointmentServiceImplTest {
         User artistUser = new User();
         artistUser.setId(artistId);
         Artist artist = new Artist();
+        ReflectionTestUtils.setField(artist, "id", artistId);
         artist.setUser(artistUser);
 
         User customerUser = new User();
         customerUser.setId(customerId);
         Customer customer = new Customer();
+        ReflectionTestUtils.setField(customer, "id", customerId);
         customer.setUser(customerUser);
 
         Booking booking = new Booking();
