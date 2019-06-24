@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.venus.domain.dtos.Artist.ArtistRequest;
-import com.venus.domain.dtos.Artist.ArtistResponse;
+import com.venus.domain.dtos.artist.ArtistRequest;
+import com.venus.domain.dtos.artist.ArtistResponse;
 import com.venus.domain.entities.user.Artist;
 import com.venus.domain.entities.user.User;
+import com.venus.domain.enums.Role;
 import com.venus.domain.mappers.ArtistMapper;
 import com.venus.repositories.ArtistRepository;
 import com.venus.services.user.UserService;
@@ -32,6 +33,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistResponse createArtist(ArtistRequest artistRequest) {
         User user = userService.findAuthorizedUser();
+        user.setRole(Role.ARTIST);
         Artist artist = artistMapper.toArtist(artistRequest);
         artist.setUser(user);
         artist = artistRepository.save(artist);

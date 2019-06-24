@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.venus.domain.dtos.Artist.ArtistRequest;
+import com.venus.domain.dtos.artist.ArtistRequest;
 import com.venus.domain.exceptions.ForbiddenException;
 
 import lombok.extern.slf4j.Slf4j;

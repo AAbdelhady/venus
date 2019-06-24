@@ -1,18 +1,20 @@
-package com.venus.domain.dtos.Artist;
+package com.venus.domain.dtos.artist;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArtistResponse {
 
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("first_name")
+    @JsonProperty("firstName")
     private String firstName;
 
-    @JsonProperty("last_name")
+    @JsonProperty("lastName")
     private String lastName;
 }

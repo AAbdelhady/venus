@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 
-import com.venus.domain.dtos.Artist.ArtistResponse;
+import com.venus.domain.dtos.artist.ArtistResponse;
 import com.venus.services.artist.ArtistService;
 
 import static org.mockito.BDDMockito.given;
@@ -44,8 +44,8 @@ public class ArtistControllerTest extends MvcTest {
         mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(response.getId()))
-                .andExpect(jsonPath("$.first_name").value(response.getFirstName()))
-                .andExpect(jsonPath("$.last_name").value(response.getLastName()))
+                .andExpect(jsonPath("$.firstName").value(response.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(response.getLastName()))
         ;
     }
 }
