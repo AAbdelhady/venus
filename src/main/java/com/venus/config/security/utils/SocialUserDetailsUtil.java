@@ -3,8 +3,8 @@ package com.venus.config.security.utils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.venus.domain.SocialUserDetails;
-import com.venus.domain.enums.AuthProvider;
+import com.venus.feature.common.dto.SocialUserDetails;
+import com.venus.feature.common.enums.AuthProvider;
 
 public class SocialUserDetailsUtil {
 

@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.venus.domain.entities.user.User;
+import com.venus.feature.user.entity.User;
 
 public class SecurityUtil {
 

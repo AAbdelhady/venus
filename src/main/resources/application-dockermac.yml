@@ -1,0 +1,16 @@
+spring:
+  # Data Source - Postgresql
+  datasource:
+    name: jdbc/DataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://docker.for.mac.host.internal:5433/venus
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+frontend:
+  base-url: http://localhost:4200

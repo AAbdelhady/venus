@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.venus.domain.entities.user.User;
-import com.venus.domain.enums.AuthProvider;
-import com.venus.domain.enums.Role;
-import com.venus.repositories.UserRepository;
+import com.venus.feature.common.enums.AuthProvider;
+import com.venus.feature.common.enums.Role;
+import com.venus.feature.user.entity.User;
+import com.venus.feature.user.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
 public abstract class BaseIntegrationTest {

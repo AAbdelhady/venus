@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.venus.domain.SocialUserDetails;
+import com.venus.feature.common.dto.SocialUserDetails;
 
 import static org.junit.Assert.assertEquals;
 

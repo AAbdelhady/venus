@@ -5,8 +5,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.venus.services.artist.ArtistService;
-import com.venus.services.user.UserService;
+import com.venus.feature.artist.service.ArtistService;
+import com.venus.feature.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 

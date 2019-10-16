@@ -13,7 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VenusApplication {
 
-    public static void main(String[] args) throws UnknownHostException {
+    public static void main(String[] args) throws UnknownHostException, InterruptedException {
+        Thread.sleep(30000);
         SpringApplication app = new SpringApplication(VenusApplication.class);
         Environment env = app.run(args).getEnvironment();
 

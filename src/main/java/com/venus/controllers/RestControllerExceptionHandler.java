@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.venus.domain.exceptions.ForbiddenException;
+import com.venus.exceptions.ForbiddenException;
 
 import lombok.extern.slf4j.Slf4j;
 

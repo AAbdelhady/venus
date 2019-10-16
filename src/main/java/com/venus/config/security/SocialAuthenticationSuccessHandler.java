@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -19,12 +18,13 @@ import org.springframework.stereotype.Component;
 
 import com.venus.config.security.utils.CookieUtil;
 import com.venus.config.security.utils.SecurityUtil;
-import com.venus.domain.SocialUserDetails;
-import com.venus.domain.entities.user.User;
-import com.venus.domain.enums.AuthProvider;
-import com.venus.domain.enums.Role;
-import com.venus.repositories.UserRepository;
+import com.venus.feature.common.dto.SocialUserDetails;
+import com.venus.feature.common.enums.AuthProvider;
+import com.venus.feature.common.enums.Role;
+import com.venus.feature.user.entity.User;
+import com.venus.feature.user.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.venus.config.security.utils.SecurityUtil.JWT_HEADER_NAME;
@@ -34,6 +34,7 @@ import static com.venus.config.security.utils.SocialUserDetailsUtil.parseFaceboo
 import static com.venus.config.security.utils.SocialUserDetailsUtil.parseGoogleUserDetails;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class SocialAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -48,12 +49,6 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Value("${server.secured:false}")
     private boolean isHttps;
-
-    @Autowired
-    public SocialAuthenticationSuccessHandler(UserRepository userRepository, TokenProvider tokenProvider) {
-        this.userRepository = userRepository;
-        this.tokenProvider = tokenProvider;
-    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {

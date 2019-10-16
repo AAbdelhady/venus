@@ -14,19 +14,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.venus.domain.dtos.artist.ArtistRequest;
-import com.venus.domain.exceptions.ForbiddenException;
+import com.venus.exceptions.ForbiddenException;
+import com.venus.feature.artist.dto.ArtistRequest;
+import com.venus.feature.user.dto.UserResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("api/test")
+@RequestMapping("test")
 @Slf4j
 public class TestController {
 
     @GetMapping
     public String test() {
         return new Date().toString();
+    }
+
+    @PostMapping
+    public UserResponse testPost(@RequestBody UserResponse dto) {
+        log.debug(dto.toString());
+        return dto;
     }
 
     @GetMapping("secure")

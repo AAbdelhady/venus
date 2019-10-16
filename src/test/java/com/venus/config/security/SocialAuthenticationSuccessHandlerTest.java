@@ -28,12 +28,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.venus.config.security.utils.SecurityUtil;
-import com.venus.domain.entities.user.User;
-import com.venus.domain.enums.Role;
-import com.venus.repositories.UserRepository;
+import com.venus.feature.common.enums.Role;
+import com.venus.feature.user.entity.User;
+import com.venus.feature.user.repository.UserRepository;
 
-import static com.venus.domain.enums.AuthProvider.facebook;
-import static com.venus.domain.enums.AuthProvider.google;
+import static com.venus.feature.common.enums.AuthProvider.facebook;
+import static com.venus.feature.common.enums.AuthProvider.google;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;

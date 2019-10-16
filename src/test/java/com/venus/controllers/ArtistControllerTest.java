@@ -7,8 +7,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 
-import com.venus.domain.dtos.artist.ArtistResponse;
-import com.venus.services.artist.ArtistService;
+import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.service.ArtistService;
+import com.venus.feature.user.dto.UserResponse;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,20 +33,20 @@ public class ArtistControllerTest extends MvcTest {
     @Test
     public void findArtistById() throws Exception {
         /* given */
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(1L);
+        userResponse.setFirstName("first-name");
+        userResponse.setLastName("last-name");
         ArtistResponse response = new ArtistResponse();
-        response.setId(1L);
-        response.setFirstName("first-name");
-        response.setLastName("last-name");
+        response.setUser(userResponse);
 
         given(artistService.findArtistById(1L)).willReturn(response);
 
         /* when */
-        String url = ArtistController.URL + "/1";
-        mockMvc.perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/artist/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(response.getId()))
-                .andExpect(jsonPath("$.firstName").value(response.getFirstName()))
-                .andExpect(jsonPath("$.lastName").value(response.getLastName()))
-        ;
+                .andExpect(jsonPath("$.id").value(userResponse.getId()))
+                .andExpect(jsonPath("$.first_name").value(userResponse.getFirstName()))
+                .andExpect(jsonPath("$.last_name").value(userResponse.getLastName()));
     }
 }
