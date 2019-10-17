@@ -4,6 +4,7 @@ pipeline {
         registryCredential = 'docker-hub-credentials'
         dockerImage = ''
         remoteHost = 'root@172.105.69.29'
+        composeFileLocation = '/home/docker-compose.yml'
     }
 
     agent any
@@ -16,14 +17,14 @@ pipeline {
             }
         }
         stage('Build image') {
-            steps{
+            steps {
                 script {
                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
         stage('Push image') {
-            steps{
+            steps {
                 script {
                     docker.withRegistry('', registryCredential) {
                         dockerImage.push("${env.BUILD_NUMBER}")
@@ -31,6 +32,22 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Docker Compose Down') {
+            steps {
+                sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} down"'
+             }
+        }
+        stage('Copy Scripts') {
+            steps {
+                sh 'scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}'
+                sh 'scp docker/nginx/nginx.conf ${remoteHost}:/home/nginx/nginx.conf'
+             }
+        }
+        stage('Docker Compose Up') {
+            steps {
+                sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} up -d"'
+             }
         }
     }
 }
