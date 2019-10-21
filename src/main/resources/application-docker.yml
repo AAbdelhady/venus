@@ -11,6 +11,7 @@ spring:
       ddl-auto: validate
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
+server:
+  host: 172.105.69.29
 frontend:
   base-url: http://localhost:4200
