@@ -27,4 +27,4 @@ logging:
     org.springframework.security: DEBUG
 
 frontend:
-  base-url: http://localhost:8080
+  base-url: http://localhost:3000

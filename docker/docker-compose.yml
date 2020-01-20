@@ -17,6 +17,13 @@ services:
     depends_on:
       - db
     restart: always
+  frontend:
+    image: aabdelhady/venus-webapp
+    #    ports:
+    #      - 3000:3000
+    depends_on:
+      - backend
+    restart: always
   reverse:
     image: nginx
     ports:
