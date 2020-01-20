@@ -38,6 +38,12 @@ pipeline {
                 sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} down"'
              }
         }
+        stage('Clean old local images') {
+            steps {
+                sh 'docker rmi -f $(docker images aabdelhady/venus-backend -q)'
+                sh 'docker rmi -f $(docker images aabdelhady/venus-webapp -q)'
+            }
+        }
         stage('Copy Scripts') {
             steps {
                 sh 'scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}'
