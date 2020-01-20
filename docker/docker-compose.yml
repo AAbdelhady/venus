@@ -11,14 +11,14 @@ services:
     volumes:
       - /home/dbdata:/var/lib/postgresql/data
   backend:
-    image: aabdelhady/venus-backend
+    image: aabdelhady/venus-backend:latest
     ports:
       - 8080:8080
     depends_on:
       - db
     restart: always
   frontend:
-    image: aabdelhady/venus-webapp
+    image: aabdelhady/venus-webapp:latest
     #    ports:
     #      - 3000:3000
     depends_on:
