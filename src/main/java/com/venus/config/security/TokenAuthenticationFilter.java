@@ -39,15 +39,24 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        Optional<String> jwtOptional = extractToken(request);
+        if (jwtOptional.isPresent()) {
+            String jwt = jwtOptional.get();
+            Long userId = tokenProvider.getUserIdFromToken(jwt);
+            User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
+            SecurityUtil.updateCurrentUserContext(user);
+            filterChain.doFilter(request, response);
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+    }
+
+    private Optional<String> extractToken(HttpServletRequest request) {
         try {
             Optional<String> jwtOptional = getJwtFromCookie(request);
             if (!jwtOptional.isPresent())
                 jwtOptional = getJwtFromHeader(request);
-            jwtOptional.ifPresent(jwt -> {
-                Long userId = tokenProvider.getUserIdFromToken(jwt);
-                User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
-                SecurityUtil.updateCurrentUserContext(user);
-            });
+            return jwtOptional;
         } catch (ExpiredJwtException ex) {
             handleExpiredJwtException(ex);
         } catch (MalformedJwtException ex) {
@@ -57,7 +66,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty", ex);
         }
-        filterChain.doFilter(request, response);
+        return Optional.empty();
     }
 
     private Optional<String> getJwtFromHeader(HttpServletRequest request) {
