@@ -12,6 +12,6 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
-  host: 172.105.69.29
+  use-forward-headers: true
 frontend:
   base-url: http://www.venusapp.ee
