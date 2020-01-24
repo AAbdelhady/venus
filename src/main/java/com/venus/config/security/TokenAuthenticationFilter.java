@@ -45,10 +45,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             Long userId = tokenProvider.getUserIdFromToken(jwt);
             User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
             SecurityUtil.updateCurrentUserContext(user);
-            filterChain.doFilter(request, response);
-        } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+        filterChain.doFilter(request, response);
     }
 
     private Optional<String> extractToken(HttpServletRequest request) {

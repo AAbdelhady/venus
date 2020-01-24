@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.venus.config.security.TokenAuthenticationFilter;
 
@@ -31,6 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final LogoutHandler logoutHandler;
 
     @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v2/api-docs", "/webjars/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .antMatcher("/**")
@@ -40,10 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/test/secure").authenticated()
-                .antMatchers("/api/test").permitAll()
-                .antMatchers("/api/test/redirect").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/test/secure").authenticated()
+                .antMatchers("/test").permitAll()
+                .antMatchers("/test/redirect").permitAll()
+                .antMatchers("/**").authenticated()
                 .and()
                 .oauth2Login()
                 .successHandler(socialAuthenticationSuccessHandler)
@@ -57,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable()
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(tokenAuthenticationFilter, BasicAuthenticationFilter.class);
         // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
 }
