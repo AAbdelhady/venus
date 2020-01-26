@@ -1,0 +1,31 @@
+pipeline {
+    environment {
+        remoteHost = 'root@172.105.69.29'
+        composeFileLocation = '/home/docker-compose.yml'
+    }
+
+    agent any
+
+    stages {
+        stage('Docker Compose Stop Backend') {
+            steps {
+                sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} rm -sf backend"'
+             }
+        }
+        stage('Clean old local images') {
+            steps {
+                sh 'docker rmi -f $(docker images aabdelhady/venus-backend -q)'
+            }
+        }
+        stage('Pull latest image') {
+             steps {
+                 sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} pull backend"'
+              }
+         }
+        stage('Docker Compose Up') {
+            steps {
+                sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} up -d --no-deps backend"'
+             }
+        }
+    }
+}
