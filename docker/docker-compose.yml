@@ -12,8 +12,6 @@ services:
       - /home/dbdata:/var/lib/postgresql/data
   backend:
     image: aabdelhady/venus-backend
-    ports:
-      - 8080:8080
     depends_on:
       - db
     restart: always

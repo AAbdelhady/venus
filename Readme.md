@@ -2,7 +2,8 @@
 
 ### Running Jenkins in detached mode
 1. Download `jenkins.war` (currently deployed to `~` directory on __Linode__).
-2. Run the shell command `nohup java -jar jenkins.war --httpPort=9090 &` to start jenkins on port 9090.
+2. install any required command tools for building or containerization if needed (java, maven, npm, docker, etc.).
+3. Run the shell command `nohup java -jar jenkins.war --httpPort=9090 &` to start jenkins on port 9090.
 
 __Note:__ To allow jenkins to run shell commands on a remote machine, add jenkins machine to the list of trusted machines on remote host.
 
