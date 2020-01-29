@@ -46,7 +46,7 @@ public class ArtistControllerTest extends MvcTest {
         mockMvc.perform(get("/artist/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(userResponse.getId()))
-                .andExpect(jsonPath("$.first_name").value(userResponse.getFirstName()))
-                .andExpect(jsonPath("$.last_name").value(userResponse.getLastName()));
+                .andExpect(jsonPath("$.firstName").value(userResponse.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(userResponse.getLastName()));
     }
 }
