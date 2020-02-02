@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.venus.exceptions.NotFoundException;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.repository.ArtistRepository;
 import com.venus.feature.booking.dto.BookingRequest;
@@ -88,8 +89,8 @@ public class BookingServiceTest {
         assertEquals(customerId, bookingCaptor.getValue().getCustomer().getId().longValue());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void createBookingTest_artistNotExist() {
+    @Test(expected = NotFoundException.class)
+    public void createBookingTest_shouldThrowNotFoundException_whenArtistNotExist() {
         // given
         final long artistId = 10L;
         final long customerId = 11L;
@@ -110,8 +111,8 @@ public class BookingServiceTest {
         service.createBooking(request);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void createBookingTest_customerNotExist() {
+    @Test(expected = NotFoundException.class)
+    public void createBookingTest_shouldThrowNotFoundException_whenCustomerNotExist() {
         // given
         final long artistId = 10L;
         final long customerId = 11L;

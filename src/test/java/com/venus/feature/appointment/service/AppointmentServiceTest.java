@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
 
+import com.venus.exceptions.NotFoundException;
 import com.venus.feature.appointment.dto.AppointmentRequest;
 import com.venus.feature.appointment.dto.AppointmentResponse;
 import com.venus.feature.appointment.entity.Appointment;
@@ -84,8 +85,8 @@ public class AppointmentServiceTest {
         assertEquals(customerId, appointmentCaptor.getValue().getCustomer().getId().longValue());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void createAppointment_shouldThrowIllegalArgumentException_whenBookingNotExist() {
+    @Test(expected = NotFoundException.class)
+    public void createAppointment_shouldThrowNotFoundException_whenBookingNotExist() {
         // given
         final long bookingId = 1L;
         when(bookingRepository.findById(bookingId)).thenReturn(Optional.empty());
