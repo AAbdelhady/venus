@@ -3,6 +3,7 @@ package com.venus.feature.booking.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.venus.exceptions.NotFoundException;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.repository.ArtistRepository;
 import com.venus.feature.booking.dto.BookingRequest;
@@ -29,9 +30,9 @@ public class BookingService {
     private final BookingMapper bookingMapper;
 
     public BookingResponse createBooking(BookingRequest bookingRequest) {
-        Artist artist = artistRepository.findById(bookingRequest.getArtistId()).orElseThrow(IllegalArgumentException::new);
-        Customer customer = customerRepository.findById(bookingRequest.getCustomerId()).orElseThrow(IllegalArgumentException::new);
+        Artist artist = artistRepository.findById(bookingRequest.getArtistId()).orElseThrow(NotFoundException::new);
+        Customer customer = customerRepository.findById(bookingRequest.getCustomerId()).orElseThrow(NotFoundException::new);
         Booking booking = Booking.builder().artist(artist).customer(customer).message(bookingRequest.getMessage()).build();
-        return bookingMapper.toDto(bookingRepository.save(booking));
+        return bookingMapper.mapOne(bookingRepository.save(booking));
     }
 }

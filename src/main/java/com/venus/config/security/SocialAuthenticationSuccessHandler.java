@@ -90,7 +90,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         User user = User.builder()
                 .authProvider(details.getAuthProvider())
                 .loginId(details.getLoginId())
-                .role(Role.USER)
+                .role(Role.UNSPECIFIED)
                 .firstName(details.getFirstName())
                 .lastName(details.getLastName())
                 .email(details.getEmail())

@@ -68,7 +68,7 @@ public class SocialAuthenticationSuccessHandlerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpServletResponse response = new MockHttpServletResponse();
 
-        Authentication authentication = new OAuth2AuthenticationToken(dummyFacebookOauth2User(), AuthorityUtils.createAuthorityList(Role.USER.getAuthority()), "facebook");
+        Authentication authentication = new OAuth2AuthenticationToken(dummyFacebookOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "facebook");
 
         /* when */
         successHandler.onAuthenticationSuccess(request, response, authentication);
@@ -102,7 +102,7 @@ public class SocialAuthenticationSuccessHandlerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpServletResponse response = new MockHttpServletResponse();
 
-        Authentication authentication = new OAuth2AuthenticationToken(dummyFacebookOauth2User(), AuthorityUtils.createAuthorityList(Role.USER.getAuthority()), "facebook");
+        Authentication authentication = new OAuth2AuthenticationToken(dummyFacebookOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "facebook");
 
         /* when */
         successHandler.onAuthenticationSuccess(request, response, authentication);
@@ -132,7 +132,7 @@ public class SocialAuthenticationSuccessHandlerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpServletResponse response = new MockHttpServletResponse();
 
-        Authentication authentication = new OAuth2AuthenticationToken(dummyGoogleOauth2User(), AuthorityUtils.createAuthorityList(Role.USER.getAuthority()), "google");
+        Authentication authentication = new OAuth2AuthenticationToken(dummyGoogleOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "google");
 
         /* when */
         successHandler.onAuthenticationSuccess(request, response, authentication);
@@ -166,7 +166,7 @@ public class SocialAuthenticationSuccessHandlerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpServletResponse response = new MockHttpServletResponse();
 
-        Authentication authentication = new OAuth2AuthenticationToken(dummyGoogleOauth2User(), AuthorityUtils.createAuthorityList(Role.USER.getAuthority()), "google");
+        Authentication authentication = new OAuth2AuthenticationToken(dummyGoogleOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "google");
 
         /* when */
         successHandler.onAuthenticationSuccess(request, response, authentication);
@@ -204,7 +204,7 @@ public class SocialAuthenticationSuccessHandlerTest {
         attributes.put("last_name", "facebook-last");
         attributes.put("email", "facebook-email");
 
-        return new DefaultOAuth2User(AuthorityUtils.createAuthorityList(Role.USER.getAuthority()), attributes, "id");
+        return new DefaultOAuth2User(AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), attributes, "id");
     }
 
     private OAuth2User dummyGoogleOauth2User() {
@@ -214,7 +214,7 @@ public class SocialAuthenticationSuccessHandlerTest {
         attributes.put("family_name", "google-last");
         attributes.put("email", "google-email");
 
-        return new DefaultOAuth2User(AuthorityUtils.createAuthorityList(Role.USER.getAuthority()), attributes, "sub");
+        return new DefaultOAuth2User(AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), attributes, "sub");
     }
 
     private Answer<User> saveUserAnswer() {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.venus.exceptions.ForbiddenException;
+import com.venus.exceptions.NotFoundException;
 import com.venus.feature.artist.dto.ArtistRequest;
 import com.venus.feature.user.dto.UserResponse;
 
@@ -54,6 +55,11 @@ public class TestController {
     @GetMapping("error/403")
     public void error403() {
         throw new ForbiddenException("Some Forbidden Exception Message!");
+    }
+
+    @GetMapping("error/404")
+    public void error404() {
+        throw new NotFoundException("What you requested does not exist!");
     }
 
     @GetMapping("redirect")

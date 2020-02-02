@@ -10,5 +10,5 @@ import com.venus.feature.user.mapper.UserMapper;
 @Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class)
 public interface CustomerMapper {
 
-    CustomerResponse toDto(Customer entity);
+    CustomerResponse mapOne(Customer entity);
 }

@@ -28,7 +28,7 @@ public class AppointmentMapperTest {
         appointment.setAppointmentTime(OffsetDateTime.now());
 
         // when
-        AppointmentResponse response = appointmentMapper.toDto(appointment);
+        AppointmentResponse response = appointmentMapper.mapOne(appointment);
 
         // then
         assertEquals(appointment.getId(), response.getId());

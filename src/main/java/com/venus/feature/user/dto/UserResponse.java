@@ -1,6 +1,7 @@
 package com.venus.feature.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.venus.feature.common.enums.Role;
 
 import lombok.Data;
 
@@ -15,4 +16,7 @@ public class UserResponse {
 
     @JsonProperty("lastName")
     private String lastName;
+
+    @JsonProperty("role")
+    private Role role;
 }

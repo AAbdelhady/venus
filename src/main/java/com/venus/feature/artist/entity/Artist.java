@@ -21,7 +21,4 @@ public class Artist extends AbstractExtendedUser {
 
     @Column(name = "active")
     private boolean active;
-
-    @Column(name = "artist_nick")
-    private String artistNick;
 }

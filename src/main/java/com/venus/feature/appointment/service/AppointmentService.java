@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.venus.exceptions.NotFoundException;
 import com.venus.feature.appointment.dto.AppointmentRequest;
 import com.venus.feature.appointment.dto.AppointmentResponse;
 import com.venus.feature.appointment.entity.Appointment;
@@ -27,10 +28,10 @@ public class AppointmentService {
     private final AppointmentMapper appointmentMapper;
 
     public AppointmentResponse createAppointment(AppointmentRequest request) {
-        Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow(IllegalArgumentException::new);
+        Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow(NotFoundException::new);
         Appointment appointment = saveAppointment(booking, request.getAppointmentTime());
         bookingRepository.deleteById(booking.getId());
-        return appointmentMapper.toDto(appointment);
+        return appointmentMapper.mapOne(appointment);
     }
 
     private Appointment saveAppointment(Booking booking, OffsetDateTime appointmentTime) {

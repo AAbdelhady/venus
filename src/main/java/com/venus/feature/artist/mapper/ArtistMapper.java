@@ -11,7 +11,7 @@ import com.venus.feature.user.mapper.UserMapper;
 @Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class)
 public interface ArtistMapper {
 
-    ArtistResponse toDto(Artist entity);
+    ArtistResponse mapOne(Artist entity);
 
-    Artist toArtist(ArtistRequest artistRequest);
+    Artist mapOne(ArtistRequest artistRequest);
 }

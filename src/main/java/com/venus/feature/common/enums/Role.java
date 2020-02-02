@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public enum Role implements GrantedAuthority {
 
     ANONYMOUS("ROLE_ANONYMOUS"),
-    USER("ROLE_USER"),
+    UNSPECIFIED("ROLE_UNSPECIFIED"),
     ARTIST("ROLE_ARTIST"),
     CUSTOMER("ROLE_CUSTOMER");
 

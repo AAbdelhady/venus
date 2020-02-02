@@ -9,6 +9,5 @@ import com.venus.feature.artist.entity.Artist;
 
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
-
     Optional<Artist> findByUserId(long userId);
 }
