@@ -1,5 +1,7 @@
 package com.venus.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingResponse createBooking(@RequestBody BookingRequest request) {
+    public BookingResponse createBooking(@RequestBody @Valid BookingRequest request) {
         return bookingService.createBooking(request);
     }
 }

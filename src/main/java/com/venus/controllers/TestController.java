@@ -4,8 +4,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 
-import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.venus.exceptions.ForbiddenException;
 import com.venus.exceptions.NotFoundException;
-import com.venus.feature.artist.dto.ArtistRequest;
 import com.venus.feature.user.dto.UserResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,11 +42,6 @@ public class TestController {
     @GetMapping("error/400")
     public void error400() {
         throw new IllegalArgumentException("Some Illegal Argument Exception Message!");
-    }
-
-    @PostMapping("error/args")
-    public void errorArgs(@RequestBody @Valid ArtistRequest request) {
-        log.info(request.toString());
     }
 
     @GetMapping("error/403")

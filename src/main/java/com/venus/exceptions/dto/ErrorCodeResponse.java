@@ -1,11 +1,9 @@
 package com.venus.exceptions.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
 public class ErrorCodeResponse {
     private String name;

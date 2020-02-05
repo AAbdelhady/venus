@@ -13,7 +13,7 @@ abstract class MvcTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    ExceptionMapper exceptionMapper = new ExceptionMapperImpl();
+    private ExceptionMapper exceptionMapper = new ExceptionMapperImpl();
 
     void init(Object controller) {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)

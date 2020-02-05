@@ -9,12 +9,13 @@ import org.junit.Test;
 import com.venus.feature.common.dto.SocialUserDetails;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SocialUserDetailsUtilTest {
 
     @Test
-    public void parseFacebookUserDetails() {
-        /* given */
+    public void parseFacebookUserDetails_shouldParseDetailsCorrectly_whenPictureExists() {
+        // given 
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("url", "facebook-profile-pic");
         LinkedHashMap<String, Object> picture = new LinkedHashMap<>();
@@ -27,20 +28,40 @@ public class SocialUserDetailsUtilTest {
         attributes.put("email", "facebook-email");
         attributes.put("picture", picture);
 
-        /* when */
+        // when 
         SocialUserDetails socialUserDetails = SocialUserDetailsUtil.parseFacebookUserDetails(attributes);
 
-        /* then */
-        assertEquals("facebook-id", socialUserDetails.getLoginId());
-        assertEquals("facebook-first", socialUserDetails.getFirstName());
-        assertEquals("facebook-last", socialUserDetails.getLastName());
-        assertEquals("facebook-email", socialUserDetails.getEmail());
+        // then 
+        assertEquals(attributes.get("id"), socialUserDetails.getLoginId());
+        assertEquals(attributes.get("first_name"), socialUserDetails.getFirstName());
+        assertEquals(attributes.get("last_name"), socialUserDetails.getLastName());
+        assertEquals(attributes.get("email"), socialUserDetails.getEmail());
         assertEquals("facebook-profile-pic", socialUserDetails.getProfilePictureUrl());
     }
 
     @Test
-    public void parseGoogleUserDetails() {
-        /* given */
+    public void parseFacebookUserDetails_shouldParseDetailsCorrectly_whenPictureNotExists() {
+        // given
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("id", "facebook-id");
+        attributes.put("first_name", "facebook-first");
+        attributes.put("last_name", "facebook-last");
+        attributes.put("email", "facebook-email");
+
+        // when
+        SocialUserDetails socialUserDetails = SocialUserDetailsUtil.parseFacebookUserDetails(attributes);
+
+        // then
+        assertEquals(attributes.get("id"), socialUserDetails.getLoginId());
+        assertEquals(attributes.get("first_name"), socialUserDetails.getFirstName());
+        assertEquals(attributes.get("last_name"), socialUserDetails.getLastName());
+        assertEquals(attributes.get("email"), socialUserDetails.getEmail());
+        assertNull(socialUserDetails.getProfilePictureUrl());
+    }
+
+    @Test
+    public void parseGoogleUserDetails_shouldParseDetailsCorrectly() {
+        // given 
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("sub", "google-id");
         attributes.put("given_name", "google-first");
@@ -48,10 +69,10 @@ public class SocialUserDetailsUtilTest {
         attributes.put("email", "google-email");
         attributes.put("picture", "google-profile-pic");
 
-        /* when */
+        // when 
         SocialUserDetails socialUserDetails = SocialUserDetailsUtil.parseGoogleUserDetails(attributes);
 
-        /* then */
+        // then 
         assertEquals("google-id", socialUserDetails.getLoginId());
         assertEquals("google-first", socialUserDetails.getFirstName());
         assertEquals("google-last", socialUserDetails.getLastName());

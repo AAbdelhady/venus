@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.venus.exceptions.NotFoundException;
-import com.venus.feature.artist.dto.ArtistRequest;
 import com.venus.feature.artist.dto.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.mapper.ArtistMapper;
@@ -21,14 +20,12 @@ import lombok.RequiredArgsConstructor;
 public class ArtistService {
 
     private final UserService userService;
-
     private final ArtistRepository artistRepository;
-
     private final ArtistMapper artistMapper;
 
-    public ArtistResponse createArtist(ArtistRequest artistRequest) {
+    public ArtistResponse createArtist() {
         User user = userService.updateAuthorizedUserRole(Role.ARTIST);
-        Artist artist = artistMapper.mapOne(artistRequest);
+        Artist artist = new Artist();
         artist.setUser(user);
         artist = artistRepository.save(artist);
         return artistMapper.mapOne(artist);

@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
     SERVER_ERROR(-1),
-    UNSPECIFIED(0);
+    UNSPECIFIED(0),
+    VALIDATION_ERROR(1);
 
     private final int value;
 }

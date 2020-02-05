@@ -20,9 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomerService {
 
     private final UserService userService;
-
     private final CustomerRepository customerRepository;
-
     private final CustomerMapper customerMapper;
 
     public CustomerResponse createCustomer() {

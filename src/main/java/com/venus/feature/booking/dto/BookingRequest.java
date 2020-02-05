@@ -1,22 +1,17 @@
 package com.venus.feature.booking.dto;
 
-import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
 @Data
 public class BookingRequest {
 
-    @JsonProperty("customerId")
-    @NotBlank
+    @NotNull
     private Long customerId;
 
-    @JsonProperty("artistId")
-    @NotBlank
+    @NotNull
     private Long artistId;
 
-    @NotBlank
     private String message;
 }

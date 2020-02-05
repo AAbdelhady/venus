@@ -2,17 +2,15 @@ package com.venus.feature.artist.repository;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.venus.BaseIntegrationTest;
+import com.venus.DbTest;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.user.entity.User;
 
 import static org.junit.Assert.assertEquals;
 
-@DataJpaTest
-public class ArtistRepositoryIntegrationTest extends BaseIntegrationTest {
+public class ArtistRepositoryIntegrationTest extends DbTest {
 
     @Autowired
     private ArtistRepository artistRepository;
@@ -21,9 +19,7 @@ public class ArtistRepositoryIntegrationTest extends BaseIntegrationTest {
     public void findByUser_shouldReturnCorrectArtist() {
         // given
         User user = createUser(Role.ARTIST);
-        Artist expected = new Artist();
-        expected.setUser(user);
-        expected = artistRepository.save(expected);
+        Artist expected = createArtist(user);
 
         // when
         Artist actual = artistRepository.findByUserId(user.getId()).orElseThrow(RuntimeException::new);

@@ -28,7 +28,7 @@ public class TokenProvider {
     private Key key;
 
     @PostConstruct
-    public void post() {
+    private void init() {
         key = new SecretKeySpec(SECRET_KEY.getBytes(), SignatureAlgorithm.HS512.getJcaName());
     }
 

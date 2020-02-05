@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public abstract class AbstractException extends RuntimeException {
+public abstract class VenusException extends RuntimeException {
     protected ErrorCode code = ErrorCode.UNSPECIFIED;
 
-    AbstractException(String message) {
+    VenusException(String message) {
         super(message);
     }
 
-    AbstractException(ErrorCode code, String message) {
+    VenusException(ErrorCode code, String message) {
         super(message);
         this.code = code;
     }

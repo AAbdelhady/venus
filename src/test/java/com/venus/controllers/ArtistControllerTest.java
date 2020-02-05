@@ -8,11 +8,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 
 import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.service.ArtistService;
-import com.venus.feature.user.dto.UserResponse;
 
+import static com.venus.testutils.MapperTestUtils.artistMapper;
+import static com.venus.testutils.UnitTestUtils.createDummyArtist;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,22 +34,36 @@ public class ArtistControllerTest extends MvcTest {
     }
 
     @Test
+    public void createArtist() throws Exception {
+        // given
+        Artist artist = createDummyArtist();
+        ArtistResponse response = artistMapper.mapOne(artist);
+
+        given(artistService.createArtist()).willReturn(response);
+
+        // when
+        mockMvc.perform(post("/artist").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(artist.getId()))
+                .andExpect(jsonPath("$.firstName").value(artist.getUser().getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(artist.getUser().getLastName()))
+                .andExpect(jsonPath("$.role").value(artist.getUser().getRole().name()));
+    }
+
+    @Test
     public void findArtistById() throws Exception {
-        /* given */
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(1L);
-        userResponse.setFirstName("first-name");
-        userResponse.setLastName("last-name");
-        ArtistResponse response = new ArtistResponse();
-        response.setUser(userResponse);
+        // given
+        Artist artist = createDummyArtist();
+        ArtistResponse response = artistMapper.mapOne(artist);
 
         given(artistService.findArtistById(1L)).willReturn(response);
 
-        /* when */
+        // when
         mockMvc.perform(get("/artist/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(userResponse.getId()))
-                .andExpect(jsonPath("$.firstName").value(userResponse.getFirstName()))
-                .andExpect(jsonPath("$.lastName").value(userResponse.getLastName()));
+                .andExpect(jsonPath("$.id").value(artist.getId()))
+                .andExpect(jsonPath("$.firstName").value(artist.getUser().getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(artist.getUser().getLastName()))
+                .andExpect(jsonPath("$.role").value(artist.getUser().getRole().name()));
     }
 }

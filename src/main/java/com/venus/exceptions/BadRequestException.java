@@ -5,7 +5,7 @@ import com.venus.exceptions.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class BadRequestException extends AbstractException {
+public class BadRequestException extends VenusException {
 
     public BadRequestException(String message) {
         super(message);

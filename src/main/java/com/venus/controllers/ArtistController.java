@@ -4,12 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.venus.feature.artist.dto.ArtistRequest;
 import com.venus.feature.artist.dto.ArtistResponse;
 import com.venus.feature.artist.service.ArtistService;
 
@@ -24,8 +22,8 @@ public class ArtistController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ArtistResponse createArtist(@RequestBody ArtistRequest request) {
-        return artistService.createArtist(request);
+    public ArtistResponse createArtist() {
+        return artistService.createArtist();
     }
 
     @GetMapping("{id}")

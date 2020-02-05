@@ -20,6 +20,8 @@ import com.venus.feature.booking.entity.Booking;
 import com.venus.feature.booking.repository.BookingRepository;
 import com.venus.feature.customer.entity.Customer;
 
+import static com.venus.testutils.AssertionUtils.assertArtistEqualsResponse;
+import static com.venus.testutils.AssertionUtils.assertCustomerEqualsResponse;
 import static com.venus.testutils.MapperTestUtils.appointmentMapper;
 import static com.venus.testutils.UnitTestUtils.createDummyArtist;
 import static com.venus.testutils.UnitTestUtils.createDummyBooking;
@@ -49,15 +51,11 @@ public class AppointmentServiceTest {
     @Test
     public void createAppointment_shouldSucceed_whenRequestIsValid() {
         // given
-        final long bookingId = 1L;
-        final long artistId = 10L;
-        final long customerId = 11L;
+        Artist artist = createDummyArtist();
+        Customer customer = createDummyCustomer();
 
-        Artist artist = createDummyArtist(artistId);
-        Customer customer = createDummyCustomer(customerId);
-
-        Booking booking = createDummyBooking(bookingId, artist, customer);
-        when(bookingRepository.findById(bookingId)).thenReturn(Optional.of(booking));
+        Booking booking = createDummyBooking(artist, customer);
+        when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
 
         when(appointmentRepository.save(isA(Appointment.class))).then(saveAppointmentAnswer());
 
@@ -65,24 +63,24 @@ public class AppointmentServiceTest {
 
         AppointmentRequest request = new AppointmentRequest();
         request.setAppointmentTime(appointmentTime);
-        request.setBookingId(bookingId);
+        request.setBookingId(booking.getId());
 
         // when
         AppointmentResponse response = service.createAppointment(request);
 
         // then
         assertEquals(appointmentTime, response.getAppointmentTime());
-        assertEquals(artistId, response.getArtist().getUser().getId().longValue());
-        assertEquals(customerId, response.getCustomer().getUser().getId().longValue());
+        assertArtistEqualsResponse(artist, response.getArtist());
+        assertCustomerEqualsResponse(customer, response.getCustomer());
 
-        verify(bookingRepository).deleteById(eq(bookingId));
+        verify(bookingRepository).deleteById(eq(booking.getId()));
 
         ArgumentCaptor<Appointment> appointmentCaptor = ArgumentCaptor.forClass(Appointment.class);
         verify(appointmentRepository).save(appointmentCaptor.capture());
 
         assertEquals(appointmentTime, appointmentCaptor.getValue().getAppointmentTime());
-        assertEquals(artistId, appointmentCaptor.getValue().getArtist().getId().longValue());
-        assertEquals(customerId, appointmentCaptor.getValue().getCustomer().getId().longValue());
+        assertEquals(artist.getId(), appointmentCaptor.getValue().getArtist().getId());
+        assertEquals(customer.getId(), appointmentCaptor.getValue().getCustomer().getId());
     }
 
     @Test(expected = NotFoundException.class)

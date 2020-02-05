@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +35,7 @@ import com.venus.feature.user.repository.UserRepository;
 import static com.venus.feature.common.enums.AuthProvider.facebook;
 import static com.venus.feature.common.enums.AuthProvider.google;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
@@ -64,23 +65,26 @@ public class SocialAuthenticationSuccessHandlerTest {
 
     @Test
     public void onAuthenticationSuccessTest_facebook_newUser() throws IOException {
-        /* given */
+        // given
         HttpServletRequest request = new MockHttpServletRequest();
-        HttpServletResponse response = new MockHttpServletResponse();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         Authentication authentication = new OAuth2AuthenticationToken(dummyFacebookOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "facebook");
 
-        /* when */
+        // when
         successHandler.onAuthenticationSuccess(request, response, authentication);
 
-        /*then */
+        //then
         assertEquals(302, response.getStatus());
         assertEquals("http://frontend.com/redirect", response.getHeader("Location"));
         assertEquals("random-token", response.getHeader("JWT"));
         assertEquals("86400", response.getHeader("JWT_TTL_SEC"));
-        assertEquals("random-token", ((MockHttpServletResponse) response).getCookie("JWT").getValue());
-        assertEquals(86400, ((MockHttpServletResponse) response).getCookie("JWT").getMaxAge());
-        assertTrue(((MockHttpServletResponse) response).getCookie("JWT").isHttpOnly());
+
+        Cookie cookie = response.getCookie("JWT");
+        assertNotNull(cookie);
+        assertEquals("random-token", cookie.getValue());
+        assertEquals(86400, cookie.getMaxAge());
+        assertTrue(cookie.isHttpOnly());
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, times(1)).save(captor.capture());
@@ -95,26 +99,29 @@ public class SocialAuthenticationSuccessHandlerTest {
 
     @Test
     public void onAuthenticationSuccessTest_facebook_existingUser() throws IOException {
-        /* given */
+        // given
         User existingUser = User.builder().loginId("facebook-id").firstName("old-first").lastName("old-last").email("old-email").build();
         when(userRepository.findOneByLoginId("facebook-id")).thenReturn(Optional.of(existingUser));
 
         HttpServletRequest request = new MockHttpServletRequest();
-        HttpServletResponse response = new MockHttpServletResponse();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         Authentication authentication = new OAuth2AuthenticationToken(dummyFacebookOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "facebook");
 
-        /* when */
+        // when
         successHandler.onAuthenticationSuccess(request, response, authentication);
 
-        /*then */
+        //then
         assertEquals(302, response.getStatus());
         assertEquals("http://frontend.com/redirect", response.getHeader("Location"));
         assertEquals("random-token", response.getHeader("JWT"));
         assertEquals("86400", response.getHeader("JWT_TTL_SEC"));
-        assertEquals("random-token", ((MockHttpServletResponse) response).getCookie("JWT").getValue());
-        assertEquals(86400, ((MockHttpServletResponse) response).getCookie("JWT").getMaxAge());
-        assertTrue(((MockHttpServletResponse) response).getCookie("JWT").isHttpOnly());
+
+        Cookie cookie = response.getCookie("JWT");
+        assertNotNull(cookie);
+        assertEquals("random-token", cookie.getValue());
+        assertEquals(86400, cookie.getMaxAge());
+        assertTrue(cookie.isHttpOnly());
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, times(1)).save(captor.capture());
@@ -128,23 +135,26 @@ public class SocialAuthenticationSuccessHandlerTest {
 
     @Test
     public void onAuthenticationSuccessTest_google_newUser() throws IOException {
-        /* given */
+        // given
         HttpServletRequest request = new MockHttpServletRequest();
-        HttpServletResponse response = new MockHttpServletResponse();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         Authentication authentication = new OAuth2AuthenticationToken(dummyGoogleOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "google");
 
-        /* when */
+        // when
         successHandler.onAuthenticationSuccess(request, response, authentication);
 
-        /*then */
+        //then
         assertEquals(302, response.getStatus());
         assertEquals("http://frontend.com/redirect", response.getHeader("Location"));
         assertEquals("random-token", response.getHeader("JWT"));
         assertEquals("86400", response.getHeader("JWT_TTL_SEC"));
-        assertEquals("random-token", ((MockHttpServletResponse) response).getCookie("JWT").getValue());
-        assertEquals(86400, ((MockHttpServletResponse) response).getCookie("JWT").getMaxAge());
-        assertTrue(((MockHttpServletResponse) response).getCookie("JWT").isHttpOnly());
+
+        Cookie cookie = response.getCookie("JWT");
+        assertNotNull(cookie);
+        assertEquals("random-token", cookie.getValue());
+        assertEquals(86400, cookie.getMaxAge());
+        assertTrue(cookie.isHttpOnly());
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, times(1)).save(captor.capture());
@@ -159,26 +169,29 @@ public class SocialAuthenticationSuccessHandlerTest {
 
     @Test
     public void onAuthenticationSuccessTest_google_existingUser() throws IOException {
-        /* given */
+        // given
         User existingUser = User.builder().loginId("facebook-id").firstName("old-first").lastName("old-last").email("old-email").build();
         when(userRepository.findOneByLoginId("facebook-id")).thenReturn(Optional.of(existingUser));
 
         HttpServletRequest request = new MockHttpServletRequest();
-        HttpServletResponse response = new MockHttpServletResponse();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         Authentication authentication = new OAuth2AuthenticationToken(dummyGoogleOauth2User(), AuthorityUtils.createAuthorityList(Role.UNSPECIFIED.getAuthority()), "google");
 
-        /* when */
+        // when
         successHandler.onAuthenticationSuccess(request, response, authentication);
 
-        /*then */
+        //then
         assertEquals(302, response.getStatus());
         assertEquals("http://frontend.com/redirect", response.getHeader("Location"));
         assertEquals("random-token", response.getHeader("JWT"));
         assertEquals("86400", response.getHeader("JWT_TTL_SEC"));
-        assertEquals("random-token", ((MockHttpServletResponse) response).getCookie("JWT").getValue());
-        assertEquals(86400, ((MockHttpServletResponse) response).getCookie("JWT").getMaxAge());
-        assertTrue(((MockHttpServletResponse) response).getCookie("JWT").isHttpOnly());
+
+        Cookie cookie = response.getCookie("JWT");
+        assertNotNull(cookie);
+        assertEquals("random-token", cookie.getValue());
+        assertEquals(86400, cookie.getMaxAge());
+        assertTrue(cookie.isHttpOnly());
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, times(1)).save(captor.capture());

@@ -9,6 +9,5 @@ import com.venus.feature.user.mapper.UserMapper;
 
 @Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class)
 public interface CustomerMapper {
-
     CustomerResponse mapOne(Customer entity);
 }

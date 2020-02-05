@@ -30,31 +30,30 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final static String AUTH_HEADER_NAME = "Authorization";
-
     private final static String TOKEN_PREFIX = "Bearer ";
 
     private final TokenProvider tokenProvider;
-
     private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> jwtOptional = extractToken(request);
-        if (jwtOptional.isPresent()) {
-            String jwt = jwtOptional.get();
-            Long userId = tokenProvider.getUserIdFromToken(jwt);
-            User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
-            SecurityUtil.updateCurrentUserContext(user);
-        }
+        jwtOptional.ifPresent(this::setSecurityContextUsingJwt);
         filterChain.doFilter(request, response);
     }
 
     private Optional<String> extractToken(HttpServletRequest request) {
+        Optional<String> jwtOptional = getJwtFromCookie(request);
+        if (!jwtOptional.isPresent())
+            jwtOptional = getJwtFromHeader(request);
+        return jwtOptional;
+    }
+
+    private void setSecurityContextUsingJwt(String jwt) {
         try {
-            Optional<String> jwtOptional = getJwtFromCookie(request);
-            if (!jwtOptional.isPresent())
-                jwtOptional = getJwtFromHeader(request);
-            return jwtOptional;
+            Long userId = tokenProvider.getUserIdFromToken(jwt);
+            User user = userRepository.findById(userId).orElseThrow(() -> new MalformedJwtException("No user found for ID: " + userId));
+            SecurityUtil.updateCurrentUserContext(user);
         } catch (ExpiredJwtException ex) {
             handleExpiredJwtException(ex);
         } catch (MalformedJwtException ex) {
@@ -64,7 +63,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         } catch (IllegalArgumentException ex) {
             log.error("JWT claims string is empty", ex);
         }
-        return Optional.empty();
     }
 
     private Optional<String> getJwtFromHeader(HttpServletRequest request) {

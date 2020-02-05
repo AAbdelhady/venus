@@ -1,9 +1,6 @@
 package com.venus.exceptions;
 
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-public class ForbiddenException extends RuntimeException {
+public class ForbiddenException extends VenusException {
 
     public ForbiddenException(String message) {
         super(message);
