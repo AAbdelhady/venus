@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run --name venus-postgres -p 5433:5432 -v /Users/ahmedabdelhady/Projects/venus/dbdata/:/var/lib/postgresql/data -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=venus -d postgres

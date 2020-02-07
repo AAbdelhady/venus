@@ -11,7 +11,7 @@ spring:
     default-property-inclusion: non_null
   flyway:
     baseline-on-migrate: true
-    baseline-version: 1.0.0
+    baseline-version: 20.1.0
   security:
     # social login clients
     oauth2:

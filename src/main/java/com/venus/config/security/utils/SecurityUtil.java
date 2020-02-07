@@ -11,6 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.venus.feature.user.entity.User;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class SecurityUtil {
 
     public static final String JWT_HEADER_NAME = "JWT";

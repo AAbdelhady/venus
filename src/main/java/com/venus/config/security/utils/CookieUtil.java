@@ -6,6 +6,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class CookieUtil {
 
     public static final String JWT_COOKIE = "JWT";

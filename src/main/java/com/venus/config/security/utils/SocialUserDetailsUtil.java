@@ -6,6 +6,9 @@ import java.util.Map;
 import com.venus.feature.common.dto.SocialUserDetails;
 import com.venus.feature.common.enums.AuthProvider;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class SocialUserDetailsUtil {
 
     public static SocialUserDetails parseFacebookUserDetails(Map<String, Object> socialDetailsMap) {
