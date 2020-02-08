@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -28,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AuthenticationSuccessHandler socialAuthenticationSuccessHandler;
+    private final AuthenticationFailureHandler socialAuthenticationFailureHandler;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
     private final LogoutHandler logoutHandler;
 
@@ -53,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .successHandler(socialAuthenticationSuccessHandler)
+                .failureHandler(socialAuthenticationFailureHandler)
                 .and()
                 .logout()
                 .addLogoutHandler(logoutHandler)
