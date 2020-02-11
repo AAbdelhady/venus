@@ -19,4 +19,7 @@ public class UserResponse {
 
     @JsonProperty("role")
     private Role role;
+
+    @JsonProperty("profilePictureUrl")
+    private String profilePictureUrl;
 }

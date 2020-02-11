@@ -1,5 +1,7 @@
 package com.venus.feature.artist.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,5 +36,10 @@ public class ArtistService {
     public ArtistResponse findArtistById(Long id) {
         Artist artist = artistRepository.findByUserId(id).orElseThrow(NotFoundException::new);
         return artistMapper.mapOne(artist);
+    }
+
+    public Page<ArtistResponse> searchArtists(Pageable pageable) {
+        Page<Artist> page = artistRepository.findAll(pageable);
+        return artistMapper.mapPage(page);
     }
 }

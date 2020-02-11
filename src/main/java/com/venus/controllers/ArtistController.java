@@ -1,5 +1,7 @@
 package com.venus.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,11 @@ import lombok.RequiredArgsConstructor;
 public class ArtistController {
 
     private final ArtistService artistService;
+
+    @GetMapping
+    public Page<ArtistResponse> searchArtists(Pageable pageable) {
+        return artistService.searchArtists(pageable);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

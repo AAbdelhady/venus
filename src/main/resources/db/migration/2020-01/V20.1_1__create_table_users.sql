@@ -1,38 +1,38 @@
 -- users table --
-CREATE TABLE IF NOT EXISTS users
+create table if not exists users
 (
-  id                  BIGINT PRIMARY KEY       NOT NULL,
-  login_id            VARCHAR(64)              NOT NULL,
-  first_name          VARCHAR(64)              NOT NULL,
-  last_name           VARCHAR(64)              NOT NULL,
-  role                VARCHAR(64)              NOT NULL,
-  auth_provider       VARCHAR(64)              NOT NULL,
-  email               VARCHAR(64)              NOT NULL,
-  phone               VARCHAR(64),
-  profile_picture_url VARCHAR(256),
-  created             TIMESTAMP WITH TIME ZONE NOT NULL,
-  modified            TIMESTAMP WITH TIME ZONE NOT NULL,
-  CONSTRAINT users_login_id_unique UNIQUE (login_id)
+    id                  BIGINT PRIMARY KEY       not null,
+    login_id            varchar(64)              not null,
+    first_name          varchar(64)              not null,
+    last_name           varchar(64)              not null,
+    role                varchar(64)              not null,
+    auth_provider       varchar(64)              not null,
+    email               varchar(64)              not null,
+    phone               varchar(64),
+    profile_picture_url varchar(256),
+    created             timestamp with time zone not null,
+    modified            timestamp with time zone not null,
+    constraint users_login_id_unique unique (login_id)
 );
-CREATE SEQUENCE IF NOT EXISTS users_seq;
-CREATE UNIQUE INDEX IF NOT EXISTS users_login_id_uindex ON users (login_id);
-CREATE INDEX IF NOT EXISTS users_modified_index ON users (modified);
+create sequence if not exists users_seq increment by 50;
+create unique index if not exists users_login_id_uindex on users (login_id);
+create index if not exists users_modified_index on users (modified);
 
 
 -- customers table --
-CREATE TABLE IF NOT EXISTS customers
+create table if not exists customers
 (
-  user_id BIGINT PRIMARY KEY NOT NULL,
-  CONSTRAINT customers_user_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+    user_id bigint primary key not null,
+    constraint customers_user_id_fk foreign key (user_id) references users (id) on update cascade on delete cascade
 );
-CREATE UNIQUE INDEX IF NOT EXISTS customers_id_uindex ON customers (user_id);
+create unique index if not exists customers_id_uindex on customers (user_id);
 
 
 -- artists table --
-CREATE TABLE IF NOT EXISTS artists
+create table if not exists artists
 (
-  user_id     BIGINT PRIMARY KEY NOT NULL,
-  active      BOOLEAN            NOT NULL DEFAULT FALSE,
-  CONSTRAINT artists_user_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+    user_id bigint primary key not null,
+    active  boolean            not null default false,
+    constraint artists_user_id_fk foreign key (user_id) references users (id) on update cascade on delete cascade
 );
-CREATE UNIQUE INDEX IF NOT EXISTS artists_id_uindex ON customers (user_id);
+create unique index if not exists artists_id_uindex on customers (user_id);

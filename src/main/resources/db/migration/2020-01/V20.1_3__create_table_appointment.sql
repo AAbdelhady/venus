@@ -1,14 +1,14 @@
-CREATE TABLE IF NOT EXISTS appointments
+create table if not exists appointments
 (
-  id               BIGINT PRIMARY KEY       NOT NULL,
-  customer_id      BIGINT                   NOT NULL,
-  artist_id        BIGINT                   NOT NULL,
-  appointment_time TIMESTAMP WITH TIME ZONE NOT NULL,
-  created          TIMESTAMP WITH TIME ZONE NOT NULL,
-  modified         TIMESTAMP WITH TIME ZONE NOT NULL,
-  CONSTRAINT appointments_customer_id_fk FOREIGN KEY (customer_id) REFERENCES customers (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT appointments_artist_id_fk FOREIGN KEY (artist_id) REFERENCES artists (user_id) ON UPDATE CASCADE ON DELETE CASCADE
+    id               bigint PRIMARY KEY       not null,
+    customer_id      bigint                   not null,
+    artist_id        bigint                   not null,
+    appointment_time timestamp with time zone not null,
+    created          timestamp with time zone not null,
+    modified         timestamp with time zone not null,
+    constraint appointments_customer_id_fk foreign key (customer_id) references customers (user_id) on update cascade on delete cascade,
+    constraint appointments_artist_id_fk foreign key (artist_id) references artists (user_id) on update cascade on delete cascade
 );
-CREATE SEQUENCE IF NOT EXISTS appointments_seq;
-CREATE INDEX IF NOT EXISTS appointments_customer_id_index ON appointments (customer_id);
-CREATE INDEX IF NOT EXISTS appointments_artist_id_index ON appointments (artist_id);
+create sequence if not exists appointments_seq increment by 50;
+create index if not exists appointments_customer_id_index on appointments (customer_id);
+create index if not exists appointments_artist_id_index on appointments (artist_id);

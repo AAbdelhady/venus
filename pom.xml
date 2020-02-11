@@ -23,6 +23,7 @@
         <jjwt.version>0.10.5</jjwt.version>
         <powermock.version>2.0.0</powermock.version>
         <swagger.version>2.9.2</swagger.version>
+        <faker.version>1.0.1</faker.version>
     </properties>
 
     <dependencies>
@@ -169,6 +170,13 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
+        </dependency>
+
+        <!-- Faker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${faker.version}</version>
         </dependency>
 
 
