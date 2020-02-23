@@ -1,7 +1,7 @@
 -- users table --
 create table if not exists users
 (
-    id                  BIGINT PRIMARY KEY       not null,
+    id                  bigint primary key       not null,
     login_id            varchar(64)              not null,
     first_name          varchar(64)              not null,
     last_name           varchar(64)              not null,

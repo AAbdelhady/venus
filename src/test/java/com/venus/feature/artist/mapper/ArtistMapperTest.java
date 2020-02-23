@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.venus.feature.artist.dto.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
+import com.venus.feature.common.dto.response.PageResponse;
 
 import static com.venus.testutils.AssertionUtils.assertArtistEqualsResponse;
 import static com.venus.testutils.MapperTestUtils.artistMapper;
@@ -76,12 +77,11 @@ public class ArtistMapperTest {
         Page<Artist> page = new PageImpl<>(list, pageable, total);
 
         // when
-        Page<ArtistResponse> response = artistMapper.mapPage(page);
+        PageResponse<ArtistResponse> response = artistMapper.mapPage(page);
 
         // then
         assertEquals(list.size(), response.getContent().size());
         assertEquals(total, response.getTotalElements());
-        assertEquals(pageable, response.getPageable());
         for (int i = 0; i < list.size(); i++)
             assertArtistEqualsResponse(list.get(i), response.getContent().get(i));
     }

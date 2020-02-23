@@ -251,6 +251,24 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>2.0.1</version>
+                <executions>
+                    <execution>
+                        <id>utf8-to-latin</id>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                        <phase>process-resources</phase><!-- default -->
+                        <configuration>
+                            <srcDir>${basedir}/src/main/resources/i18n</srcDir><!-- must be set -->
+                            <targetDir>${project.build.outputDirectory}/i18n</targetDir><!-- must be set -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

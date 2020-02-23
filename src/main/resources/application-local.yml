@@ -6,10 +6,9 @@ spring:
         username: postgres
         password: password
     jpa:
-        hibernate:
-            ddl-auto: validate
         show-sql: true
         database-platform: org.hibernate.dialect.PostgreSQLDialect
-
 frontend:
   base-url: http://localhost:3000
+backend:
+  base-url: http://localhost:8080

@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Value("${swagger.base-url:}")
+    @Value("${backend.base-url:}")
     private String host;
 
     @Bean

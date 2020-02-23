@@ -11,6 +11,8 @@ import com.venus.feature.artist.dto.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.customer.dto.CustomerResponse;
 import com.venus.feature.customer.entity.Customer;
+import com.venus.feature.specialty.dto.SpecialityResponse;
+import com.venus.feature.specialty.entity.Speciality;
 import com.venus.feature.user.dto.UserResponse;
 import com.venus.feature.user.entity.User;
 
@@ -45,6 +47,12 @@ public class AssertionUtils {
         assertEquals(user.getFirstName(), response.getFirstName());
         assertEquals(user.getLastName(), response.getLastName());
         assertEquals(user.getRole(), response.getRole());
+    }
+
+    public static void assertSpecialityEqualsResponse(Speciality speciality, SpecialityResponse response) {
+        assertEquals(speciality.getId(), response.getId());
+        assertEquals(speciality.getName(), response.getName());
+        assertEquals(speciality.getPrice(), response.getPrice());
     }
 
     public static void assertUserInSecurityContext(User user) {

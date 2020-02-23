@@ -6,14 +6,19 @@
       "description": "Encryption key used for generating and verifying JSON Web Token"
     },
     {
-      "name": "swagger.base-url",
-      "type": "java.lang.String",
-      "description": "Base URL to be used running requests through swagger UI"
-    },
-    {
       "name": "frontend.base-url",
       "type": "java.lang.String",
       "description": "Base URL for Venus webapp application"
+    },
+    {
+      "name": "backend.base-url",
+      "type": "java.lang.String",
+      "description": "Base URL for Venus REST application"
+    },
+    {
+      "name": "server.secured",
+      "type": "java.lang.Boolean",
+      "description": "Flag indicating if the environment is using HTTPS"
     }
   ]
 }

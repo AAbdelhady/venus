@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:~/venus
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /console/
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+frontend:
+  base-url: http://localhost:3000
+backend:
+  base-url: http://localhost:8080

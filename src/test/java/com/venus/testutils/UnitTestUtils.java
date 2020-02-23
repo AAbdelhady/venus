@@ -1,8 +1,10 @@
 package com.venus.testutils;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -11,6 +13,7 @@ import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.booking.entity.Booking;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
+import com.venus.feature.specialty.entity.Speciality;
 import com.venus.feature.user.entity.User;
 
 import static com.venus.testutils.DateUtils.dateToOffsetDateTime;
@@ -79,6 +82,15 @@ public class UnitTestUtils {
         return appointment;
     }
 
+    public static Speciality createDummySpeciality(Artist artist) {
+        Speciality speciality = new Speciality();
+        speciality.setId(randomId());
+        speciality.setArtist(artist);
+        speciality.setName(UUID.randomUUID().toString());
+        speciality.setPrice(BigDecimal.valueOf(randomLong(10, 50)));
+        return speciality;
+    }
+
     public static String randomName() {
         return randomAlphabeticString(random(6, 16));
     }
@@ -106,7 +118,11 @@ public class UnitTestUtils {
     }
 
     public static long randomId() {
-        return Integer.valueOf(random(0, 10000)).longValue();
+        return randomLong(0, 10000);
+    }
+
+    public static long randomLong(int min, int max) {
+        return Integer.valueOf(random(min, max)).longValue();
     }
 
     public static int random(int min, int max) {
