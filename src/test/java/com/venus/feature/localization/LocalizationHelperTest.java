@@ -1,6 +1,9 @@
 package com.venus.feature.localization;
 
+import java.util.Locale;
+
 import org.junit.Test;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,15 +16,22 @@ public class LocalizationHelperTest {
         final String key = "DUMMY";
 
         // when
-        String nullArgResult = LocalizationHelper.getLocalizedValue(null, bundleName, key);
-        String emptyArgResult = LocalizationHelper.getLocalizedValue("", bundleName, key);
-        String englishArgResult = LocalizationHelper.getLocalizedValue("en", bundleName, key);
-        String estonianArgResult = LocalizationHelper.getLocalizedValue("ee", bundleName, key);
+        LocaleContextHolder.setLocale(new Locale(""));
+        String emptyLangResult = LocalizationHelper.getLocalizedValue(bundleName, key);
+
+        LocaleContextHolder.setLocale(new Locale("unsupported"));
+        String unsupportedLangResult = LocalizationHelper.getLocalizedValue(bundleName, key);
+
+        LocaleContextHolder.setLocale(new Locale(LocalizationConstants.EN));
+        String englishLangResult = LocalizationHelper.getLocalizedValue(bundleName, key);
+
+        LocaleContextHolder.setLocale(new Locale(LocalizationConstants.ET));
+        String estonianLangResult = LocalizationHelper.getLocalizedValue(bundleName, key);
 
         // then
-        assertEquals("estonian", nullArgResult);
-        assertEquals("estonian", emptyArgResult);
-        assertEquals("english", englishArgResult);
-        assertEquals("estonian", estonianArgResult);
+        assertEquals("estonian", emptyLangResult);
+        assertEquals("estonian", unsupportedLangResult);
+        assertEquals("english", englishLangResult);
+        assertEquals("estonian", estonianLangResult);
     }
 }

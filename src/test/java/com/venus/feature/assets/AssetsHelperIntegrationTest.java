@@ -3,12 +3,12 @@ package com.venus.feature.assets;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.venus.BootTest;
+import com.venus.IntegrationTest;
 import com.venus.feature.artist.entity.Category;
 
 import static org.junit.Assert.assertEquals;
 
-public class AssetsHelperIntegrationTest extends BootTest {
+public class AssetsHelperIntegrationTest extends IntegrationTest {
 
     @Autowired
     private AssetsHelper assetsHelper;

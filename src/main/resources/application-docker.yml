@@ -1,13 +1,10 @@
 spring:
   datasource:
-    name: jdbc/DataSource
-    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://db:5432/venus
     username: postgres
     password: password
   jpa:
     show-sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
   use-forward-headers: true
   secured: true

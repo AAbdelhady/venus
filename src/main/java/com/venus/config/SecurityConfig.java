@@ -52,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/test/secure").authenticated()
                 .antMatchers("/test", "/test/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/artist/category").permitAll()
+                .antMatchers(HttpMethod.GET, "/artist/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/artist").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
                 .oauth2Login()

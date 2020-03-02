@@ -6,13 +6,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import com.venus.DbTest;
+import com.venus.IntegrationTest;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.specialty.entity.Speciality;
 
 import static org.junit.Assert.assertEquals;
 
-public class SpecialityRepositoryIntegrationTest extends DbTest {
+public class SpecialityRepositoryIntegrationTest extends IntegrationTest {
 
     @Autowired
     private SpecialityRepository specialityRepository;

@@ -36,7 +36,6 @@ import com.venus.feature.user.entity.User;
 import com.venus.feature.user.service.UserService;
 
 import static com.venus.feature.localization.LocalizationConstants.BUNDLE_NAMES;
-import static com.venus.feature.localization.LocalizationConstants.DEFAULT_LANG;
 import static com.venus.feature.localization.LocalizationHelper.getLocalizedValue;
 import static com.venus.testutils.AssertionUtils.assertArtistEqualsResponse;
 import static com.venus.testutils.AssertionUtils.assertUserEqualsResponse;
@@ -129,7 +128,7 @@ public class ArtistServiceTest {
     }
 
     @Test
-    public void searchArtists_shouldReturnPage_whenPageableProvided() {
+    public void searchArtists_shouldInvokeFindAll_whenNoCategoryProvided() {
         // given
         final long total = 100L;
 
@@ -143,25 +142,51 @@ public class ArtistServiceTest {
         when(artistRepository.findAll(pageable)).thenReturn(page);
 
         // when
-        PageResponse<ArtistResponse> response = service.searchArtists(pageable);
+        PageResponse<ArtistResponse> response = service.searchArtists(null, pageable);
 
         // then
         assertEquals(list.size(), response.getContent().size());
         assertEquals(total, response.getTotalElements());
         for (int i = 0; i < list.size(); i++)
             assertArtistEqualsResponse(list.get(i), response.getContent().get(i));
+        verify(artistRepository).findAll(pageable);
+    }
+
+    @Test
+    public void searchArtists_shouldInvokeFindByCategory_whenCategoryProvided() {
+        // given
+        final long total = 100L;
+        final Category category = Category.MAKE_UP;
+
+        final Pageable pageable = PageRequest.of(10, 2);
+
+        List<Artist> list = new ArrayList<>();
+        list.add(createDummyArtist());
+        list.add(createDummyArtist());
+
+        Page<Artist> page = new PageImpl<>(list, pageable, total);
+        when(artistRepository.findByCategory(category, pageable)).thenReturn(page);
+
+        // when
+        PageResponse<ArtistResponse> response = service.searchArtists(category, pageable);
+
+        // then
+        assertEquals(list.size(), response.getContent().size());
+        assertEquals(total, response.getTotalElements());
+        for (int i = 0; i < list.size(); i++)
+            assertArtistEqualsResponse(list.get(i), response.getContent().get(i));
+        verify(artistRepository).findByCategory(category, pageable);
     }
 
     @Test
     public void listCategories_shouldReturnSetOfCategories() {
         // when
-        final String lang = DEFAULT_LANG;
-        List<CategoryResponse> categories = service.listCategories(lang);
+        List<CategoryResponse> categories = service.listCategories();
 
         //then
         assertEquals(Category.values().length, categories.size());
         Arrays.asList(Category.values()).forEach(c -> assertTrue(categories.stream().anyMatch(res -> res.getValue() == c)));
-        Arrays.asList(Category.values()).forEach(c -> assertTrue(categories.stream().anyMatch(res -> res.getText().equals(getLocalizedValue(lang, BUNDLE_NAMES.CATEGORY, c.name())))));
+        Arrays.asList(Category.values()).forEach(c -> assertTrue(categories.stream().anyMatch(res -> res.getText().equals(getLocalizedValue(BUNDLE_NAMES.CATEGORY, c.name())))));
     }
 
     private Answer<Artist> artistSaveAnswer() {

@@ -23,14 +23,13 @@ import com.venus.feature.artist.service.ArtistService;
 import com.venus.feature.common.dto.response.PageResponse;
 import com.venus.feature.specialty.dto.SpecialityRequest;
 
-import static com.venus.feature.localization.LocalizationConstants.ACCEPT_LANGUAGE_HEADER;
-import static com.venus.feature.localization.LocalizationConstants.DEFAULT_LANG;
 import static com.venus.testutils.MapperTestUtils.artistMapper;
 import static com.venus.testutils.UnitTestUtils.createDummyArtist;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,7 +52,7 @@ public class ArtistControllerTest extends MvcTest {
     }
 
     @Test
-    public void searchArtists_shouldInvokeArtistServiceWithPageable() throws Exception {
+    public void searchArtists_shouldInvokeArtistServiceWithNullCategory_whenNoCategoryParamExist() throws Exception {
         // given
         final int pageNumber = 2;
         final int pageSize = 10;
@@ -67,7 +66,7 @@ public class ArtistControllerTest extends MvcTest {
         }
         List<ArtistResponse> responseList = artistMapper.mapList(artistList);
         PageResponse<ArtistResponse> responsePage = new PageResponse<>(responseList, total);
-        given(artistService.searchArtists(any(Pageable.class))).willReturn(responsePage);
+        given(artistService.searchArtists(isNull(), any(Pageable.class))).willReturn(responsePage);
 
         // when
         String sortString = sortField + "," + sortDirection;
@@ -82,7 +81,44 @@ public class ArtistControllerTest extends MvcTest {
 
         // then
         ArgumentCaptor<Pageable> captor = ArgumentCaptor.forClass(Pageable.class);
-        verify(artistService).searchArtists(captor.capture());
+        verify(artistService).searchArtists(isNull(), captor.capture());
+        assertEquals(pageSize, captor.getValue().getPageSize());
+        assertEquals(pageNumber, captor.getValue().getPageNumber());
+        assertEquals(pageSize, captor.getValue().getPageSize());
+        assertEquals(sortField + ": " + sortDirection.toUpperCase(), captor.getValue().getSort().toString());
+    }
+
+    @Test
+    public void searchArtists_shouldInvokeArtistServiceWithProvidedCategory_whenCategoryParamExist() throws Exception {
+        // given
+        final int pageNumber = 2;
+        final int pageSize = 10;
+        final String sortField = "id";
+        final String sortDirection = "asc";
+        final int total = 120;
+
+        List<Artist> artistList = new ArrayList<>();
+        for (int i = 0; i < pageSize; i++) {
+            artistList.add(createDummyArtist());
+        }
+        List<ArtistResponse> responseList = artistMapper.mapList(artistList);
+        PageResponse<ArtistResponse> responsePage = new PageResponse<>(responseList, total);
+        given(artistService.searchArtists(any(Category.class), any(Pageable.class))).willReturn(responsePage);
+
+        // when
+        String sortString = sortField + "," + sortDirection;
+        mockMvc.perform(get("/artist?category=TATTOO")
+                .param("page", String.valueOf(pageNumber))
+                .param("size", String.valueOf(pageSize))
+                .param("sort", sortString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(artistList.size())))
+                .andExpect(jsonPath("$.totalElements").value(total));
+
+        // then
+        ArgumentCaptor<Pageable> captor = ArgumentCaptor.forClass(Pageable.class);
+        verify(artistService).searchArtists(eq(Category.TATTOO), captor.capture());
         assertEquals(pageSize, captor.getValue().getPageSize());
         assertEquals(pageNumber, captor.getValue().getPageNumber());
         assertEquals(pageSize, captor.getValue().getPageSize());
@@ -285,14 +321,14 @@ public class ArtistControllerTest extends MvcTest {
     }
 
     @Test
-    public void listCategories_shouldUseDefaultLanguage_whenNoLanguageHeaderProvided() throws Exception {
+    public void listCategories_shouldInvokeArtistService() throws Exception {
         // given
         CategoryResponse response = new CategoryResponse();
         response.setValue(Category.TATTOO);
         response.setText("Tattoo");
         List<CategoryResponse> categories = Collections.singletonList(response);
 
-        given(artistService.listCategories(anyString())).willReturn(categories);
+        given(artistService.listCategories()).willReturn(categories);
 
         // when
         mockMvc.perform(get("/artist/category").contentType(MediaType.APPLICATION_JSON))
@@ -303,30 +339,6 @@ public class ArtistControllerTest extends MvcTest {
                 .andExpect(jsonPath("$[0].photoUrl").doesNotExist());
 
         // then
-        verify(artistService).listCategories(DEFAULT_LANG);
-    }
-
-    @Test
-    public void listCategories_shouldUseProvidedLanguage_whenLanguageHeaderProvided() throws Exception {
-        // given
-        final String lang = "de";
-
-        CategoryResponse response = new CategoryResponse();
-        response.setValue(Category.TATTOO);
-        response.setText("Tattoo");
-        List<CategoryResponse> categories = Collections.singletonList(response);
-
-        given(artistService.listCategories(anyString())).willReturn(categories);
-
-        // when
-        mockMvc.perform(get("/artist/category").header(ACCEPT_LANGUAGE_HEADER, lang).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(categories.size())))
-                .andExpect(jsonPath("$[0].value").value(response.getValue().toString()))
-                .andExpect(jsonPath("$[0].text").value(response.getText()))
-                .andExpect(jsonPath("$[0].photoUrl").doesNotExist());
-
-        // then
-        verify(artistService).listCategories(lang);
+        verify(artistService).listCategories();
     }
 }

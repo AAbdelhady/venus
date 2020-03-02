@@ -24,6 +24,7 @@
         <powermock.version>2.0.0</powermock.version>
         <swagger.version>2.9.2</swagger.version>
         <faker.version>1.0.1</faker.version>
+        <test.containers.version>1.12.5</test.containers.version>
     </properties>
 
     <dependencies>
@@ -92,11 +93,11 @@
         </dependency>
 
         <!-- H2 -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.h2database</groupId>-->
+        <!--            <artifactId>h2</artifactId>-->
+        <!--            <scope>runtime</scope>-->
+        <!--        </dependency>-->
 
         <!-- Postgres -->
         <dependency>
@@ -199,11 +200,18 @@
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
             <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- TestContainers -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${test.containers.version}</version>
             <scope>test</scope>
         </dependency>
 

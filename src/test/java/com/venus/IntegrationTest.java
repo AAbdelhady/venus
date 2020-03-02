@@ -2,10 +2,14 @@ package com.venus;
 
 import java.math.BigDecimal;
 
+import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.entity.Category;
@@ -18,6 +22,7 @@ import com.venus.feature.specialty.entity.Speciality;
 import com.venus.feature.specialty.repository.SpecialityRepository;
 import com.venus.feature.user.entity.User;
 import com.venus.feature.user.repository.UserRepository;
+import com.venus.testutils.TestPostgresContainer;
 
 import static com.venus.testutils.UnitTestUtils.delay;
 import static com.venus.testutils.UnitTestUtils.random;
@@ -28,8 +33,13 @@ import static com.venus.testutils.UnitTestUtils.randomName;
 import static com.venus.testutils.UnitTestUtils.randomNumericString;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
 @ActiveProfiles("test")
+@Transactional
 public abstract class IntegrationTest {
+
+    @ClassRule
+    public static PostgreSQLContainer postgreSQLContainer = TestPostgresContainer.getInstance();
 
     @Autowired
     private UserRepository userRepository;
@@ -65,6 +75,10 @@ public abstract class IntegrationTest {
 
     protected Artist createArtist(User user) {
         return createArtist(user, randomCategory());
+    }
+
+    protected Artist createArtist(Category category) {
+        return createArtist(createUser(Role.ARTIST), category);
     }
 
     protected Artist createArtist(User user, Category category) {

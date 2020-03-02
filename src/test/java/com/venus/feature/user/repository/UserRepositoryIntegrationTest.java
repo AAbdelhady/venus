@@ -5,14 +5,14 @@ import java.util.Optional;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.venus.DbTest;
+import com.venus.IntegrationTest;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.user.entity.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class UserRepositoryIntegrationTest extends DbTest {
+public class UserRepositoryIntegrationTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;

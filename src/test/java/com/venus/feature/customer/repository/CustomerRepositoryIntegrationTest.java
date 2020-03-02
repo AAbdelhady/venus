@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.venus.DbTest;
+import com.venus.IntegrationTest;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.user.entity.User;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
-public class CustomerRepositoryIntegrationTest extends DbTest {
+public class CustomerRepositoryIntegrationTest extends IntegrationTest {
 
     @Autowired
     private CustomerRepository customerRepository;

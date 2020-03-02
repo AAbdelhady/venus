@@ -56,13 +56,13 @@ public class ArtistService {
         return artistMapper.mapOne(artist);
     }
 
-    public PageResponse<ArtistResponse> searchArtists(Pageable pageable) {
-        Page<Artist> page = artistRepository.findAll(pageable);
+    public PageResponse<ArtistResponse> searchArtists(Category category, Pageable pageable) {
+        Page<Artist> page = category == null ? artistRepository.findAll(pageable) : artistRepository.findByCategory(category, pageable);
         return artistMapper.mapPage(page);
     }
 
-    public List<CategoryResponse> listCategories(String lang) { // TODO Server side cached
-        Map<Category, String> categoryTextMap = Arrays.stream(Category.values()).collect(Collectors.toMap(c -> c, c -> getLocalizedValue(lang, BUNDLE_NAMES.CATEGORY, c.name())));
+    public List<CategoryResponse> listCategories() { // TODO Server side cached
+        Map<Category, String> categoryTextMap = Arrays.stream(Category.values()).collect(Collectors.toMap(c -> c, c -> getLocalizedValue(BUNDLE_NAMES.CATEGORY, c.name())));
         return Arrays.stream(Category.values()).map(c -> {
             CategoryResponse response = new CategoryResponse();
             response.setValue(c);

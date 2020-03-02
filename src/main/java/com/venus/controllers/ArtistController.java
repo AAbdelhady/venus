@@ -5,26 +5,28 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.venus.feature.artist.dto.ArtistRequest;
 import com.venus.feature.artist.dto.ArtistResponse;
 import com.venus.feature.artist.dto.CategoryResponse;
+import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.service.ArtistService;
 import com.venus.feature.common.dto.response.PageResponse;
 
 import lombok.RequiredArgsConstructor;
 
-import static com.venus.feature.localization.LocalizationConstants.ACCEPT_LANGUAGE_HEADER;
-import static com.venus.feature.localization.LocalizationConstants.DEFAULT_LANG;
+import static com.venus.util.CacheControlUtil.maxAgeMinutes;
 
 @RestController
 @RequestMapping("artist")
@@ -34,8 +36,8 @@ public class ArtistController {
     private final ArtistService artistService;
 
     @GetMapping
-    public PageResponse<ArtistResponse> searchArtists(Pageable pageable) {
-        return artistService.searchArtists(pageable);
+    public PageResponse<ArtistResponse> searchArtists(@RequestParam(required = false) Category category, Pageable pageable) {
+        return artistService.searchArtists(category, pageable);
     }
 
     @PostMapping
@@ -51,7 +53,9 @@ public class ArtistController {
 
 
     @GetMapping("category")
-    public List<CategoryResponse> listCategories(@RequestHeader(value = ACCEPT_LANGUAGE_HEADER, defaultValue = DEFAULT_LANG) String lang) {
-        return artistService.listCategories(lang); // TODO ADD CACHE HEADER
+    public ResponseEntity<List<CategoryResponse>> listCategories() {
+        CacheControl cacheControl = maxAgeMinutes(60);
+        List<CategoryResponse> response = artistService.listCategories();
+        return ResponseEntity.ok().cacheControl(cacheControl).body(response);
     }
 }

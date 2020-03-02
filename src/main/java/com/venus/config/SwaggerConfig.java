@@ -25,7 +25,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build();
         if (!host.isEmpty())
-            docket.host(host);
+            docket.host(host.split("//")[1]);
         return docket;
     }
 }

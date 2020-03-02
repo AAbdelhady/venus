@@ -14,6 +14,7 @@ import com.venus.feature.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import static com.venus.test.DummyUtils.random;
+import static com.venus.test.DummyUtils.randomProfilePictureUrl;
 
 @Service
 @Transactional
@@ -28,7 +29,7 @@ public class DummyUserService {
         User user = new User();
         user.setFirstName(faker.name().firstName());
         user.setLastName(faker.name().lastName());
-        user.setProfilePictureUrl("https://picsum.photos/200");
+        user.setProfilePictureUrl(randomProfilePictureUrl());
         user.setRole(role);
         user.setLoginId(UUID.randomUUID().toString());
         user.setPhone(faker.phoneNumber().phoneNumber());

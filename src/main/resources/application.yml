@@ -5,7 +5,11 @@ server:
 spring:
   application:
     name: Venus
+  datasource:
+    name: jdbc/DataSource
+    driver-class-name: org.postgresql.Driver
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
   profiles:
