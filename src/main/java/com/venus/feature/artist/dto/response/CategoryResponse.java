@@ -1,4 +1,4 @@
-package com.venus.feature.artist.dto;
+package com.venus.feature.artist.dto.response;
 
 import com.venus.feature.artist.entity.Category;
 

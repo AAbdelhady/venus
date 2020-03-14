@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.venus.feature.artist.dto.ArtistRequest;
-import com.venus.feature.artist.dto.ArtistResponse;
-import com.venus.feature.artist.dto.CategoryResponse;
+import com.venus.feature.artist.dto.request.ArtistRequest;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
+import com.venus.feature.artist.dto.response.CategoryResponse;
 import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.service.ArtistService;
 import com.venus.feature.common.dto.response.PageResponse;
@@ -47,7 +48,7 @@ public class ArtistController {
     }
 
     @GetMapping("{id}")
-    public ArtistResponse findArtistById(@PathVariable Long id) {
+    public ArtistProfileResponse findArtistById(@PathVariable Long id) {
         return artistService.findArtistById(id);
     }
 

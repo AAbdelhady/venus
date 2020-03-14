@@ -7,8 +7,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
+import com.venus.feature.booking.dto.BookingResponse;
+import com.venus.feature.booking.entity.Booking;
 import com.venus.feature.customer.dto.CustomerResponse;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.specialty.dto.SpecialityResponse;
@@ -36,6 +39,16 @@ public class AssertionUtils {
 
     public static void assertArtistEqualsResponse(Artist artist, ArtistResponse response) {
         assertUserEqualsResponse(artist.getUser(), response.getUser());
+        assertEquals(artist.getCategory(), response.getCategory());
+    }
+
+    public static void assertArtistEqualsResponse(Artist artist, ArtistProfileResponse response) {
+        assertUserEqualsResponse(artist.getUser(), response.getUser());
+        assertEquals(artist.getCategory(), response.getCategory());
+        assertEquals(artist.getSpecialityList().size(), response.getSpecialityList().size());
+        for (int i = 0; i < artist.getSpecialityList().size(); i++) {
+            assertSpecialityEqualsResponse(artist.getSpecialityList().get(i), response.getSpecialityList().get(i));
+        }
     }
 
     public static void assertCustomerEqualsResponse(Customer customer, CustomerResponse response) {
@@ -53,6 +66,16 @@ public class AssertionUtils {
         assertEquals(speciality.getId(), response.getId());
         assertEquals(speciality.getName(), response.getName());
         assertEquals(speciality.getPrice(), response.getPrice());
+    }
+
+    public static void assertBookingEqualsResponse(Booking booking, BookingResponse response) {
+        assertEquals(booking.getId(), response.getId());
+        assertArtistEqualsResponse(booking.getArtist(), response.getArtist());
+        assertCustomerEqualsResponse(booking.getCustomer(), response.getCustomer());
+        assertSpecialityEqualsResponse(booking.getSpeciality(), response.getSpeciality());
+        assertEquals(booking.getBookingDate(), response.getBookingDate());
+        assertEquals(booking.getMessage(), response.getMessage());
+        assertEquals(booking.getStatus(), response.getStatus());
     }
 
     public static void assertUserInSecurityContext(User user) {

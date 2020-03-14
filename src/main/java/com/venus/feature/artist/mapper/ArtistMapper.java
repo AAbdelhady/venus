@@ -6,13 +6,16 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
 import com.venus.config.GlobalMapperConfig;
-import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.common.dto.response.PageResponse;
 import com.venus.feature.user.mapper.UserMapper;
 
 @Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class)
 public interface ArtistMapper {
+
+    ArtistProfileResponse mapFull(Artist artist);
 
     ArtistResponse mapOne(Artist artist);
 

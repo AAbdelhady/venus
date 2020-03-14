@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.venus.exceptions.NotFoundException;
-import com.venus.feature.artist.dto.ArtistRequest;
-import com.venus.feature.artist.dto.ArtistResponse;
-import com.venus.feature.artist.dto.CategoryResponse;
+import com.venus.feature.artist.dto.request.ArtistRequest;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
+import com.venus.feature.artist.dto.response.CategoryResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.mapper.ArtistMapper;
@@ -51,9 +52,9 @@ public class ArtistService {
         return artistMapper.mapOne(artist);
     }
 
-    public ArtistResponse findArtistById(Long id) {
+    public ArtistProfileResponse findArtistById(Long id) {
         Artist artist = artistRepository.findByUserId(id).orElseThrow(NotFoundException::new);
-        return artistMapper.mapOne(artist);
+        return artistMapper.mapFull(artist);
     }
 
     public PageResponse<ArtistResponse> searchArtists(Category category, Pageable pageable) {

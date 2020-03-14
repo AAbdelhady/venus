@@ -1,4 +1,4 @@
-package com.venus.feature.artist.dto;
+package com.venus.feature.artist.dto.request;
 
 import java.util.List;
 

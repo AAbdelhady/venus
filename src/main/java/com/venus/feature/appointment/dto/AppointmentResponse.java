@@ -3,7 +3,7 @@ package com.venus.feature.appointment.dto;
 import java.time.OffsetDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.customer.dto.CustomerResponse;
 
 import lombok.Data;

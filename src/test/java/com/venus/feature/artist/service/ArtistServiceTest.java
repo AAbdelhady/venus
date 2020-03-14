@@ -20,9 +20,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.venus.exceptions.NotFoundException;
-import com.venus.feature.artist.dto.ArtistRequest;
-import com.venus.feature.artist.dto.ArtistResponse;
-import com.venus.feature.artist.dto.CategoryResponse;
+import com.venus.feature.artist.dto.request.ArtistRequest;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
+import com.venus.feature.artist.dto.response.CategoryResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.repository.ArtistRepository;
@@ -40,9 +41,9 @@ import static com.venus.feature.localization.LocalizationHelper.getLocalizedValu
 import static com.venus.testutils.AssertionUtils.assertArtistEqualsResponse;
 import static com.venus.testutils.AssertionUtils.assertUserEqualsResponse;
 import static com.venus.testutils.MapperTestUtils.artistMapper;
+import static com.venus.testutils.RandomUtils.randomId;
 import static com.venus.testutils.UnitTestUtils.createDummyArtist;
 import static com.venus.testutils.UnitTestUtils.createDummyUser;
-import static com.venus.testutils.UnitTestUtils.randomId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -111,7 +112,7 @@ public class ArtistServiceTest {
         when(artistRepository.findByUserId(artist.getId())).thenReturn(Optional.of(artist));
 
         // when
-        ArtistResponse response = service.findArtistById(artist.getId());
+        ArtistProfileResponse response = service.findArtistById(artist.getId());
 
         // then
         assertArtistEqualsResponse(artist, response);

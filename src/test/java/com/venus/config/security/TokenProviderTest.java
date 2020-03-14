@@ -14,8 +14,8 @@ import io.jsonwebtoken.Jwts;
 import static com.venus.testutils.AssertionUtils.assertDateEqualsApprox;
 import static com.venus.testutils.AssertionUtils.assertNowApprox;
 import static com.venus.testutils.DateUtils.nowPlusSeconds;
+import static com.venus.testutils.RandomUtils.randomId;
 import static com.venus.testutils.UnitTestUtils.createDummyUser;
-import static com.venus.testutils.UnitTestUtils.randomId;
 import static org.junit.Assert.assertEquals;
 
 public class TokenProviderTest {

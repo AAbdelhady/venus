@@ -1,8 +1,11 @@
 package com.venus.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,11 @@ import lombok.RequiredArgsConstructor;
 public class BookingController {
 
     private final BookingService bookingService;
+
+    @GetMapping
+    public List<BookingResponse> listMyBookings() {
+        return bookingService.listMyBookings();
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -3,8 +3,6 @@ package com.venus.testutils;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Random;
-import java.util.UUID;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -18,12 +16,14 @@ import com.venus.feature.user.entity.User;
 
 import static com.venus.testutils.DateUtils.dateToOffsetDateTime;
 import static com.venus.testutils.DateUtils.nowPlusDays;
+import static com.venus.testutils.RandomUtils.random;
+import static com.venus.testutils.RandomUtils.randomAlphabeticString;
+import static com.venus.testutils.RandomUtils.randomBookingStatus;
+import static com.venus.testutils.RandomUtils.randomId;
+import static com.venus.testutils.RandomUtils.randomLong;
+import static com.venus.testutils.RandomUtils.randomName;
 
 public class UnitTestUtils {
-
-    private static final String ALPHABET_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    private static final String NUMERALS_STRING = "0123456789";
 
     public static User createDummyUser(Long id, String firstName, String lastName, String email, Role role) {
         User user = new User();
@@ -48,7 +48,7 @@ public class UnitTestUtils {
     }
 
     public static Artist createDummyArtist() {
-        User artistUser = createDummyUser();
+        User artistUser = createDummyUser(Role.ARTIST);
         Artist artist = new Artist();
         ReflectionTestUtils.setField(artist, "id", artistUser.getId());
         artist.setUser(artistUser);
@@ -57,7 +57,7 @@ public class UnitTestUtils {
     }
 
     public static Customer createDummyCustomer() {
-        User customerUser = createDummyUser();
+        User customerUser = createDummyUser(Role.CUSTOMER);
         Customer customer = new Customer();
         ReflectionTestUtils.setField(customer, "id", customerUser.getId());
         customer.setUser(customerUser);
@@ -69,6 +69,9 @@ public class UnitTestUtils {
         booking.setId(randomId());
         booking.setArtist(artist);
         booking.setCustomer(customer);
+        booking.setSpeciality(createDummySpeciality(artist));
+        booking.setMessage(randomAlphabeticString(20));
+        booking.setStatus(randomBookingStatus());
         return booking;
     }
 
@@ -86,49 +89,12 @@ public class UnitTestUtils {
         Speciality speciality = new Speciality();
         speciality.setId(randomId());
         speciality.setArtist(artist);
-        speciality.setName(UUID.randomUUID().toString());
+        speciality.setName(randomName());
         speciality.setPrice(BigDecimal.valueOf(randomLong(10, 50)));
         return speciality;
     }
 
-    public static String randomName() {
-        return randomAlphabeticString(random(6, 16));
-    }
 
-    public static String randomEmail(String name) {
-        String domain = randomAlphabeticString(6);
-        return name + "@" + domain + "com";
-    }
-
-    public static String randomAlphabeticString(int length) {
-        return randomString(length, ALPHABET_STRING);
-    }
-
-    public static String randomNumericString(int length) {
-        return randomString(length, NUMERALS_STRING);
-    }
-
-    public static String randomString(int length, String source) {
-        StringBuilder builder = new StringBuilder();
-        while (length-- != 0) {
-            int character = (int) (Math.random() * source.length());
-            builder.append(source.charAt(character));
-        }
-        return builder.toString();
-    }
-
-    public static long randomId() {
-        return randomLong(0, 10000);
-    }
-
-    public static long randomLong(int min, int max) {
-        return Integer.valueOf(random(min, max)).longValue();
-    }
-
-    public static int random(int min, int max) {
-        Random r = new Random();
-        return r.ints(min, max).findFirst().orElseThrow(RuntimeException::new);
-    }
 
     public static void delay() {
         try {

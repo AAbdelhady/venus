@@ -19,9 +19,9 @@ import com.venus.feature.specialty.entity.Speciality;
 import com.venus.feature.specialty.repository.SpecialityRepository;
 
 import static com.venus.testutils.MapperTestUtils.specialityMapper;
+import static com.venus.testutils.RandomUtils.randomId;
+import static com.venus.testutils.RandomUtils.randomLong;
 import static com.venus.testutils.UnitTestUtils.createDummyArtist;
-import static com.venus.testutils.UnitTestUtils.randomId;
-import static com.venus.testutils.UnitTestUtils.randomLong;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.mockito.PowerMockito.when;
 

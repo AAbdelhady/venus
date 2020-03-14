@@ -1,6 +1,7 @@
 package com.venus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -14,7 +15,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.repository.ArtistRepository;
-import com.venus.feature.common.enums.AuthProvider;
+import com.venus.feature.booking.entity.Booking;
+import com.venus.feature.booking.repository.BookingRepository;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.customer.repository.CustomerRepository;
@@ -24,13 +26,15 @@ import com.venus.feature.user.entity.User;
 import com.venus.feature.user.repository.UserRepository;
 import com.venus.testutils.TestPostgresContainer;
 
+import static com.venus.testutils.RandomUtils.randomAlphabeticString;
+import static com.venus.testutils.RandomUtils.randomAuthProvider;
+import static com.venus.testutils.RandomUtils.randomBookingStatus;
+import static com.venus.testutils.RandomUtils.randomCategory;
+import static com.venus.testutils.RandomUtils.randomEmail;
+import static com.venus.testutils.RandomUtils.randomLong;
+import static com.venus.testutils.RandomUtils.randomName;
+import static com.venus.testutils.RandomUtils.randomNumericString;
 import static com.venus.testutils.UnitTestUtils.delay;
-import static com.venus.testutils.UnitTestUtils.random;
-import static com.venus.testutils.UnitTestUtils.randomAlphabeticString;
-import static com.venus.testutils.UnitTestUtils.randomEmail;
-import static com.venus.testutils.UnitTestUtils.randomLong;
-import static com.venus.testutils.UnitTestUtils.randomName;
-import static com.venus.testutils.UnitTestUtils.randomNumericString;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,6 +42,7 @@ import static com.venus.testutils.UnitTestUtils.randomNumericString;
 @Transactional
 public abstract class IntegrationTest {
 
+    @SuppressWarnings("rawtypes")
     @ClassRule
     public static PostgreSQLContainer postgreSQLContainer = TestPostgresContainer.getInstance();
 
@@ -52,6 +57,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     private SpecialityRepository specialityRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     protected User createUser(Role role) {
         String firstName = randomName();
@@ -89,11 +97,19 @@ public abstract class IntegrationTest {
         return artistRepository.saveAndFlush(artist);
     }
 
+    protected Customer createCustomer() {
+        return createCustomer(createUser(Role.CUSTOMER));
+    }
+
     protected Customer createCustomer(User user) {
         Customer customer = new Customer();
         customer.setUser(user);
         delay();
         return customerRepository.saveAndFlush(customer);
+    }
+
+    protected Speciality createSpeciality(Artist artist) {
+        return createSpeciality(artist, randomName());
     }
 
     protected Speciality createSpeciality(Artist artist, String name) {
@@ -105,14 +121,21 @@ public abstract class IntegrationTest {
         return specialityRepository.saveAndFlush(speciality);
     }
 
-    private Category randomCategory() {
-        Category[] categories = Category.values();
-        return categories[random(0, categories.length)];
+    protected Booking createBooking(Artist artist, Customer customer) {
+        Speciality speciality = createSpeciality(artist);
+        return createBooking(artist, customer, speciality);
     }
 
-    private AuthProvider randomAuthProvider() {
-        AuthProvider[] providers = AuthProvider.values();
-        return providers[random(0, providers.length)];
+    protected Booking createBooking(Artist artist, Customer customer, Speciality speciality) {
+        Booking booking = new Booking();
+        booking.setArtist(artist);
+        booking.setCustomer(customer);
+        booking.setMessage(randomAlphabeticString(20));
+        booking.setBookingDate(LocalDate.now());
+        booking.setStatus(randomBookingStatus());
+        booking.setSpeciality(speciality);
+        delay();
+        return bookingRepository.saveAndFlush(booking);
     }
 
     private String randomPictureUrl() {

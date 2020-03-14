@@ -14,9 +14,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 
-import com.venus.feature.artist.dto.ArtistRequest;
-import com.venus.feature.artist.dto.ArtistResponse;
-import com.venus.feature.artist.dto.CategoryResponse;
+import com.venus.feature.artist.dto.request.ArtistRequest;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
+import com.venus.feature.artist.dto.response.CategoryResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.service.ArtistService;
@@ -307,7 +308,7 @@ public class ArtistControllerTest extends MvcTest {
     public void findArtistById_shouldInvokeArtistServiceWithId() throws Exception {
         // given
         Artist artist = createDummyArtist();
-        ArtistResponse response = artistMapper.mapOne(artist);
+        ArtistProfileResponse response = artistMapper.mapFull(artist);
 
         given(artistService.findArtistById(1L)).willReturn(response);
 

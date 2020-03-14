@@ -10,13 +10,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.dto.response.ArtistProfileResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.common.dto.response.PageResponse;
 
 import static com.venus.testutils.AssertionUtils.assertArtistEqualsResponse;
 import static com.venus.testutils.MapperTestUtils.artistMapper;
 import static com.venus.testutils.UnitTestUtils.createDummyArtist;
+import static com.venus.testutils.UnitTestUtils.createDummySpeciality;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -30,6 +32,20 @@ public class ArtistMapperTest {
 
         // when
         ArtistResponse response = artistMapper.mapOne(artist);
+
+        // then
+        assertArtistEqualsResponse(artist, response);
+    }
+
+    @Test
+    public void mapFull_shouldMapArtistToFullResponse_whenArtistProvided() {
+        // given
+        Artist artist = createDummyArtist();
+        artist.getSpecialityList().add(createDummySpeciality(artist));
+        artist.getSpecialityList().add(createDummySpeciality(artist));
+
+        // when
+        ArtistProfileResponse response = artistMapper.mapFull(artist);
 
         // then
         assertArtistEqualsResponse(artist, response);

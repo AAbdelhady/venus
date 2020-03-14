@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.venus.exceptions.ForbiddenException;
 import com.venus.exceptions.NotFoundException;
-import com.venus.feature.artist.dto.ArtistResponse;
+import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.artist.mapper.ArtistMapper;
 import com.venus.feature.user.dto.UserResponse;
 import com.venus.test.service.DummyArtistService;

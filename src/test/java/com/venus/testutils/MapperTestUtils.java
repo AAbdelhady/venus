@@ -32,8 +32,8 @@ public class MapperTestUtils {
         userMapper = new UserMapperImpl();
         artistMapper = new ArtistMapperImpl(userMapper);
         customerMapper = new CustomerMapperImpl(userMapper);
-        bookingMapper = new BookingMapperImpl(artistMapper, customerMapper);
-        appointmentMapper = new AppointmentMapperImpl(artistMapper, customerMapper);
         specialityMapper = new SpecialityMapperImpl();
+        bookingMapper = new BookingMapperImpl(artistMapper, customerMapper, specialityMapper);
+        appointmentMapper = new AppointmentMapperImpl(artistMapper, customerMapper);
     }
 }

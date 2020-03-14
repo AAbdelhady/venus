@@ -1,7 +1,11 @@
 package com.venus.feature.booking.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,6 +16,7 @@ import javax.persistence.Table;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.common.entity.BaseEntity;
 import com.venus.feature.customer.entity.Customer;
+import com.venus.feature.specialty.entity.Speciality;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,6 +49,17 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "artist_id", nullable = false)
     private Artist artist;
 
-    @Column(name = "message", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "speciality_id", nullable = false)
+    private Speciality speciality;
+
+    @Column(name = "booking_date", nullable = false)
+    private LocalDate bookingDate;
+
+    @Column(name = "message")
     private String message;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 }
