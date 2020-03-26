@@ -41,10 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ArtistControllerTest extends MvcTest {
 
     @InjectMocks
-    ArtistController controller;
+    private ArtistController controller;
 
     @Mock
-    ArtistService artistService;
+    private ArtistService artistService;
 
     @Before
     public void setUp() {

@@ -1,6 +1,8 @@
 package com.venus.testutils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -8,7 +10,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.venus.feature.appointment.entity.Appointment;
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.booking.entity.Booking;
+import com.venus.feature.booking.core.entity.Booking;
+import com.venus.feature.booking.core.entity.BookingStatus;
+import com.venus.feature.booking.offering.entity.Offering;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.specialty.entity.Speciality;
@@ -64,15 +68,31 @@ public class UnitTestUtils {
         return customer;
     }
 
+    public static Booking createDummyBooking() {
+        return createDummyBooking(createDummyArtist(), createDummyCustomer(), randomBookingStatus());
+    }
+
+    public static Booking createDummyBooking(BookingStatus status) {
+        return createDummyBooking(createDummyArtist(), createDummyCustomer(), status);
+    }
+
     public static Booking createDummyBooking(Artist artist, Customer customer) {
+        return createDummyBooking(artist, customer, randomBookingStatus());
+    }
+
+    public static Booking createDummyBooking(Artist artist, Customer customer, BookingStatus status) {
         Booking booking = new Booking();
         booking.setId(randomId());
         booking.setArtist(artist);
         booking.setCustomer(customer);
         booking.setSpeciality(createDummySpeciality(artist));
         booking.setMessage(randomAlphabeticString(20));
-        booking.setStatus(randomBookingStatus());
+        booking.setStatus(status);
         return booking;
+    }
+
+    public static Appointment createDummyAppointment() {
+        return createDummyAppointment(createDummyArtist(), createDummyCustomer());
     }
 
     public static Appointment createDummyAppointment(Artist artist, Customer customer) {
@@ -94,7 +114,14 @@ public class UnitTestUtils {
         return speciality;
     }
 
-
+    public static Offering createDummyOffering(Booking booking) {
+        Offering offering = new Offering();
+        offering.setId(randomId());
+        offering.setBooking(booking);
+        offering.setTime(LocalTime.now());
+        offering.setCreated(Instant.now());
+        return offering;
+    }
 
     public static void delay() {
         try {

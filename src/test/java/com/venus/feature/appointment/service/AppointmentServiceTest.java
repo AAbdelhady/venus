@@ -1,6 +1,8 @@
 package com.venus.feature.appointment.service;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -16,13 +18,15 @@ import com.venus.feature.appointment.dto.AppointmentResponse;
 import com.venus.feature.appointment.entity.Appointment;
 import com.venus.feature.appointment.repository.AppointmentRepository;
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.booking.entity.Booking;
-import com.venus.feature.booking.repository.BookingRepository;
+import com.venus.feature.booking.core.entity.Booking;
+import com.venus.feature.booking.core.repository.BookingRepository;
 import com.venus.feature.customer.entity.Customer;
 
+import static com.venus.testutils.AssertionUtils.assertAppointmentEqualsResponse;
 import static com.venus.testutils.AssertionUtils.assertArtistEqualsResponse;
 import static com.venus.testutils.AssertionUtils.assertCustomerEqualsResponse;
 import static com.venus.testutils.MapperTestUtils.appointmentMapper;
+import static com.venus.testutils.UnitTestUtils.createDummyAppointment;
 import static com.venus.testutils.UnitTestUtils.createDummyArtist;
 import static com.venus.testutils.UnitTestUtils.createDummyBooking;
 import static com.venus.testutils.UnitTestUtils.createDummyCustomer;
@@ -38,7 +42,6 @@ public class AppointmentServiceTest {
 
     @Mock
     private AppointmentRepository appointmentRepository;
-
     @Mock
     private BookingRepository bookingRepository;
 
@@ -91,6 +94,42 @@ public class AppointmentServiceTest {
 
         // when
         service.createAppointment(new AppointmentRequest());
+    }
+
+    @Test
+    public void listAppointmentsByUser_shouldInvokeGetArtistAppointments_whenUserIsArtist() {
+        // given
+        Artist artist = createDummyArtist();
+        Customer customer = createDummyCustomer();
+        Appointment appointment = createDummyAppointment(artist, customer);
+
+        when(appointmentRepository.findAllByArtistId(artist.getId())).thenReturn(Collections.singletonList(appointment));
+
+        // when
+        List<AppointmentResponse> responses = service.listAppointmentsByUser(artist.getUser());
+
+        // then
+        assertEquals(1, responses.size());
+        assertAppointmentEqualsResponse(appointment, responses.get(0));
+        verify(appointmentRepository).findAllByArtistId(artist.getId());
+    }
+
+    @Test
+    public void listAppointmentsByUser_shouldInvokeGetCustomerAppointments_whenUserIsCustomer() {
+        // given
+        Artist artist = createDummyArtist();
+        Customer customer = createDummyCustomer();
+        Appointment appointment = createDummyAppointment(artist, customer);
+
+        when(appointmentRepository.findAllByCustomerId(customer.getId())).thenReturn(Collections.singletonList(appointment));
+
+        // when
+        List<AppointmentResponse> responses = service.listAppointmentsByUser(customer.getUser());
+
+        // then
+        assertEquals(1, responses.size());
+        assertAppointmentEqualsResponse(appointment, responses.get(0));
+        verify(appointmentRepository).findAllByCustomerId(customer.getId());
     }
 
     private Answer<Appointment> saveAppointmentAnswer() {

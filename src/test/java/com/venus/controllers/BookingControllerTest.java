@@ -1,22 +1,25 @@
 package com.venus.controllers;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.booking.dto.BookingRequest;
-import com.venus.feature.booking.dto.BookingResponse;
-import com.venus.feature.booking.entity.Booking;
-import com.venus.feature.booking.service.BookingService;
+import com.venus.feature.booking.core.dto.BookingRequest;
+import com.venus.feature.booking.core.dto.BookingResponse;
+import com.venus.feature.booking.core.entity.Booking;
+import com.venus.feature.booking.core.service.BookingService;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.specialty.entity.Speciality;
 
@@ -25,8 +28,11 @@ import static com.venus.testutils.UnitTestUtils.createDummyArtist;
 import static com.venus.testutils.UnitTestUtils.createDummyBooking;
 import static com.venus.testutils.UnitTestUtils.createDummyCustomer;
 import static com.venus.testutils.UnitTestUtils.createDummySpeciality;
+import static java.lang.String.format;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,10 +43,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BookingControllerTest extends MvcTest {
 
     @InjectMocks
-    BookingController controller;
+    private BookingController controller;
 
     @Mock
-    BookingService bookingService;
+    private BookingService bookingService;
 
     @Before
     public void setUp() {
@@ -155,5 +161,23 @@ public class BookingControllerTest extends MvcTest {
 
         // then
         verify(bookingService).listMyBookings();
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Test
+    public void offerAppointmentTimes_shouldReturnCreated_whenRequestValid() throws Exception {
+        // given
+        final long bookingId = 1L;
+        final LocalTime offeredTime = LocalTime.MIDNIGHT;
+        String[] offeredTimes = new String[]{offeredTime.toString()};
+
+        // when
+        mockMvc.perform(post(format("/booking/%d/offer", bookingId)).content(objectMapper.writeValueAsString(offeredTimes)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        // then
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+        verify(bookingService).addOffersToBooking(eq(bookingId), captor.capture());
+        assertEquals(offeredTime, captor.getValue().get(0));
     }
 }

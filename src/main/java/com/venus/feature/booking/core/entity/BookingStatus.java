@@ -1,4 +1,4 @@
-package com.venus.feature.booking.entity;
+package com.venus.feature.booking.core.entity;
 
 public enum BookingStatus {
     NEW,

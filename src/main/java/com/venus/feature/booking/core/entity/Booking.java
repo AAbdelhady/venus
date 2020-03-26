@@ -1,20 +1,24 @@
-package com.venus.feature.booking.entity;
+package com.venus.feature.booking.core.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.common.entity.BaseEntity;
+import com.venus.feature.booking.offering.entity.Offering;
+import com.venus.feature.common.entity.AuditedEntity;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.specialty.entity.Speciality;
 
@@ -33,7 +37,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Booking extends BaseEntity {
+public class Booking extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "bookings_seq_generator")
@@ -41,15 +45,15 @@ public class Booking extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id", nullable = false)
     private Artist artist;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "speciality_id", nullable = false)
     private Speciality speciality;
 
@@ -62,4 +66,7 @@ public class Booking extends BaseEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "booking", orphanRemoval = true)
+    private List<Offering> offerings;
 }

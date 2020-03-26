@@ -1,10 +1,12 @@
-package com.venus.feature.booking.dto;
+package com.venus.feature.booking.core.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.venus.feature.artist.dto.response.ArtistResponse;
-import com.venus.feature.booking.entity.BookingStatus;
+import com.venus.feature.booking.core.entity.BookingStatus;
+import com.venus.feature.booking.offering.dto.OfferingResponse;
 import com.venus.feature.customer.dto.CustomerResponse;
 import com.venus.feature.specialty.dto.SpecialityResponse;
 
@@ -33,4 +35,7 @@ public class BookingResponse {
 
     @JsonProperty("status")
     private BookingStatus status;
+
+    @JsonProperty("offerings")
+    private List<OfferingResponse> offerings;
 }

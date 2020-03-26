@@ -1,4 +1,4 @@
-package com.venus.feature.booking.repository;
+package com.venus.feature.booking.core.repository;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.venus.IntegrationTest;
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.booking.entity.Booking;
+import com.venus.feature.booking.core.entity.Booking;
 import com.venus.feature.customer.entity.Customer;
 
 import static org.junit.Assert.assertEquals;

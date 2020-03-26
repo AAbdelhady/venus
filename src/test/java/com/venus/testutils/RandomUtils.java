@@ -3,7 +3,7 @@ package com.venus.testutils;
 import java.util.Random;
 
 import com.venus.feature.artist.entity.Category;
-import com.venus.feature.booking.entity.BookingStatus;
+import com.venus.feature.booking.core.entity.BookingStatus;
 import com.venus.feature.common.enums.AuthProvider;
 
 public class RandomUtils {

@@ -21,10 +21,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest extends MvcTest {
     
     @InjectMocks
-    UserController controller;
+    private UserController controller;
 
     @Mock
-    UserService userService;
+    private UserService userService;
 
     @Before
     public void setUp() {

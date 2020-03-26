@@ -1,6 +1,7 @@
-package com.venus.feature.booking.service;
+package com.venus.feature.booking.core.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -12,14 +13,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
 
+import com.venus.exceptions.BadRequestException;
 import com.venus.exceptions.NotFoundException;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.repository.ArtistRepository;
-import com.venus.feature.booking.dto.BookingRequest;
-import com.venus.feature.booking.dto.BookingResponse;
-import com.venus.feature.booking.entity.Booking;
-import com.venus.feature.booking.entity.BookingStatus;
-import com.venus.feature.booking.repository.BookingRepository;
+import com.venus.feature.booking.core.dto.BookingRequest;
+import com.venus.feature.booking.core.dto.BookingResponse;
+import com.venus.feature.booking.core.entity.Booking;
+import com.venus.feature.booking.core.entity.BookingStatus;
+import com.venus.feature.booking.core.repository.BookingRepository;
+import com.venus.feature.booking.offering.service.OfferingService;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.customer.repository.CustomerRepository;
 import com.venus.feature.specialty.entity.Speciality;
@@ -45,6 +48,9 @@ public class BookingServiceTest {
     private UserService userService;
 
     @Mock
+    private OfferingService offeringService;
+
+    @Mock
     private BookingRepository bookingRepository;
 
     @Mock
@@ -59,7 +65,7 @@ public class BookingServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new BookingService(userService, bookingRepository, artistRepository, customerRepository, specialityRepository, bookingMapper);
+        service = new BookingService(userService, offeringService, bookingRepository, artistRepository, customerRepository, specialityRepository, bookingMapper);
     }
 
     @Test
@@ -176,6 +182,49 @@ public class BookingServiceTest {
         assertEquals(1, responses.size());
         assertBookingEqualsResponse(booking, responses.get(0));
         verify(bookingRepository).findAllByCustomerId(customer.getId());
+    }
+
+    @Test
+    public void addOffersToBooking_shouldInvokeOfferingServiceAndChangeStatus() {
+        // given
+        Booking booking = createDummyBooking(BookingStatus.NEW);
+        List<LocalTime> offeredTimes = Collections.singletonList(LocalTime.now());
+
+        when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
+
+        // when
+        service.addOffersToBooking(booking.getId(), offeredTimes);
+
+        // then
+        verify(offeringService).createOfferings(booking, offeredTimes);
+
+        ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
+        verify(bookingRepository).save(captor.capture());
+        assertEquals(BookingStatus.OFFERED, captor.getValue().getStatus());
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void addOffersToBooking_shouldThrowBadRequestException_whenStatusNotNew() {
+        // given
+        Booking booking = createDummyBooking(BookingStatus.OFFERED);
+        List<LocalTime> offeredTimes = Collections.singletonList(LocalTime.now());
+
+        when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
+
+        // when
+        service.addOffersToBooking(booking.getId(), offeredTimes);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void addOffersToBooking_shouldThrowNotFoundException_whenBookingNotExist() {
+        // given
+        Booking booking = createDummyBooking(BookingStatus.NEW);
+        List<LocalTime> offeredTimes = Collections.singletonList(LocalTime.now());
+
+        when(bookingRepository.findById(booking.getId())).thenReturn(Optional.empty());
+
+        // when
+        service.addOffersToBooking(booking.getId(), offeredTimes);
     }
 
     private Answer<Booking> saveBookingAnswer() {

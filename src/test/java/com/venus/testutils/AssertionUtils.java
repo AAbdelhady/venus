@@ -7,11 +7,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.venus.feature.appointment.dto.AppointmentResponse;
+import com.venus.feature.appointment.entity.Appointment;
 import com.venus.feature.artist.dto.response.ArtistProfileResponse;
 import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.booking.dto.BookingResponse;
-import com.venus.feature.booking.entity.Booking;
+import com.venus.feature.booking.core.dto.BookingResponse;
+import com.venus.feature.booking.core.entity.Booking;
+import com.venus.feature.booking.offering.dto.OfferingResponse;
+import com.venus.feature.booking.offering.entity.Offering;
 import com.venus.feature.customer.dto.CustomerResponse;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.specialty.dto.SpecialityResponse;
@@ -76,6 +80,22 @@ public class AssertionUtils {
         assertEquals(booking.getBookingDate(), response.getBookingDate());
         assertEquals(booking.getMessage(), response.getMessage());
         assertEquals(booking.getStatus(), response.getStatus());
+        if (booking.getOfferings() != null) {
+            for (int i = 0; i < booking.getOfferings().size(); i++) {
+                assertOfferingEqualsResponse(booking.getOfferings().get(i), response.getOfferings().get(i));
+            }
+        }
+    }
+
+    public static void assertAppointmentEqualsResponse(Appointment appointment, AppointmentResponse response) {
+        assertEquals(appointment.getId(), appointment.getId());
+        assertArtistEqualsResponse(appointment.getArtist(), response.getArtist());
+        assertCustomerEqualsResponse(appointment.getCustomer(), response.getCustomer());
+        assertEquals(appointment.getAppointmentTime(), response.getAppointmentTime());
+    }
+
+    public static void assertOfferingEqualsResponse(Offering offering, OfferingResponse response) {
+        assertEquals(offering.getTime(), response.getTime());
     }
 
     public static void assertUserInSecurityContext(User user) {

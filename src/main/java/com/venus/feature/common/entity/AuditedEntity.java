@@ -11,9 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Getter;
 
 @MappedSuperclass
-public abstract class BaseEntity {
-
-    public abstract Long getId();
+public abstract class AuditedEntity {
 
     @Column(name = "created", nullable = false, updatable = false)
     @Getter

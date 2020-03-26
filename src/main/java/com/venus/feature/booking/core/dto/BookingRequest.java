@@ -1,4 +1,4 @@
-package com.venus.feature.booking.dto;
+package com.venus.feature.booking.core.dto;
 
 import java.time.LocalDate;
 

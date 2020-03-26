@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.common.entity.BaseEntity;
+import com.venus.feature.common.entity.AuditedEntity;
 import com.venus.feature.customer.entity.Customer;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Appointment extends BaseEntity {
+public class Appointment extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "bookings_seq_generator")

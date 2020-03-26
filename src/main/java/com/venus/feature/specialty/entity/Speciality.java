@@ -13,7 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.venus.feature.artist.entity.Artist;
-import com.venus.feature.common.entity.BaseEntity;
+import com.venus.feature.common.entity.AuditedEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +24,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "specialities")
 @Getter
 @Setter
-public class Speciality extends BaseEntity {
+public class Speciality extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "specialties_seq_generator")

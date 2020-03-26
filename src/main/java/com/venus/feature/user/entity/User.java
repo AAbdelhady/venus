@@ -10,7 +10,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
-import com.venus.feature.common.entity.BaseEntity;
+import com.venus.feature.common.entity.AuditedEntity;
 import com.venus.feature.common.enums.AuthProvider;
 import com.venus.feature.common.enums.Role;
 
@@ -29,7 +29,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class User extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "users_seq_generator")
