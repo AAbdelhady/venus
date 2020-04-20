@@ -11,18 +11,14 @@ import com.venus.feature.artist.dto.response.ArtistResponse;
 import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.common.dto.response.PageResponse;
 import com.venus.feature.user.mapper.UserMapper;
+import com.venus.util.MapperUtils;
 
 @Mapper(config = GlobalMapperConfig.class, uses = UserMapper.class)
 public interface ArtistMapper {
-
     ArtistProfileResponse mapFull(Artist artist);
-
     ArtistResponse mapOne(Artist artist);
-
     List<ArtistResponse> mapList(List<Artist> artistList);
-
     default PageResponse<ArtistResponse> mapPage(Page<Artist> artistPage) {
-        List<ArtistResponse> responseList = mapList(artistPage.getContent());
-        return new PageResponse<>(responseList, artistPage.getTotalElements());
+        return MapperUtils.mapPage(artistPage, this::mapList);
     }
 }

@@ -66,4 +66,8 @@ public class User extends AuditedEntity {
 
     @Column(name = "is_dummy")
     private boolean dummy;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

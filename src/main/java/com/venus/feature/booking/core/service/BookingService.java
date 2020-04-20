@@ -39,6 +39,7 @@ public class BookingService {
     private final CustomerRepository customerRepository;
     private final SpecialityRepository specialityRepository;
     private final BookingMapper bookingMapper;
+    private final BookingNotificationHelper notificationHelper;
 
     public BookingResponse createBooking(BookingRequest bookingRequest) {
         Artist artist = artistRepository.findById(bookingRequest.getArtistId()).orElseThrow(NotFoundException::new);
@@ -52,7 +53,9 @@ public class BookingService {
                 .bookingDate(bookingRequest.getBookingDate())
                 .status(BookingStatus.NEW)
                 .build();
-        return bookingMapper.mapOne(bookingRepository.save(booking));
+        booking = bookingRepository.save(booking);
+        notificationHelper.addNewBookingNotification(booking);
+        return bookingMapper.mapOne(booking);
     }
 
     public List<BookingResponse> listMyBookings() {
@@ -70,7 +73,8 @@ public class BookingService {
         assertBookingNew(booking);
         offeringService.createOfferings(booking, offeredTimes);
         booking.setStatus(BookingStatus.OFFERED);
-        bookingRepository.save(booking);
+        booking = bookingRepository.save(booking);
+        notificationHelper.addNewOffersNotification(booking);
     }
 
     private void assertBookingNew(Booking booking) {

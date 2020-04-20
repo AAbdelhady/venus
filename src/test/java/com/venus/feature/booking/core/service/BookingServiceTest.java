@@ -46,26 +46,23 @@ public class BookingServiceTest {
 
     @Mock
     private UserService userService;
-
     @Mock
     private OfferingService offeringService;
-
     @Mock
     private BookingRepository bookingRepository;
-
     @Mock
     private ArtistRepository artistRepository;
-
     @Mock
     private CustomerRepository customerRepository;
-
     @Mock
     private SpecialityRepository specialityRepository;
+    @Mock
+    private BookingNotificationHelper notificationHelper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new BookingService(userService, offeringService, bookingRepository, artistRepository, customerRepository, specialityRepository, bookingMapper);
+        service = new BookingService(userService, offeringService, bookingRepository, artistRepository, customerRepository, specialityRepository, bookingMapper, notificationHelper);
     }
 
     @Test

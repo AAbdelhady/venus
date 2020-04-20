@@ -27,7 +27,7 @@ import com.venus.feature.common.dto.response.PageResponse;
 
 import lombok.RequiredArgsConstructor;
 
-import static com.venus.util.CacheControlUtil.maxAgeMinutes;
+import static com.venus.util.CacheControlUtils.maxAgeMinutes;
 
 @RestController
 @RequestMapping("artist")

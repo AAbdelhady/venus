@@ -20,6 +20,9 @@ import com.venus.feature.booking.core.repository.BookingRepository;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.customer.repository.CustomerRepository;
+import com.venus.feature.notification.entity.Notification;
+import com.venus.feature.notification.entity.NotificationType;
+import com.venus.feature.notification.repository.NotificationRepository;
 import com.venus.feature.specialty.entity.Speciality;
 import com.venus.feature.specialty.repository.SpecialityRepository;
 import com.venus.feature.user.entity.User;
@@ -35,6 +38,7 @@ import static com.venus.testutils.RandomUtils.randomLong;
 import static com.venus.testutils.RandomUtils.randomName;
 import static com.venus.testutils.RandomUtils.randomNumericString;
 import static com.venus.testutils.UnitTestUtils.delay;
+import static java.lang.String.format;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -60,6 +64,9 @@ public abstract class IntegrationTest {
 
     @Autowired
     private BookingRepository bookingRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     protected User createUser(Role role) {
         String firstName = randomName();
@@ -136,6 +143,17 @@ public abstract class IntegrationTest {
         booking.setSpeciality(speciality);
         delay();
         return bookingRepository.saveAndFlush(booking);
+    }
+
+    protected Notification createNotification(User receiver, User sender, NotificationType type) {
+        Notification notification = new Notification();
+        notification.setReceiver(receiver);
+        notification.setSender(sender);
+        notification.setType(type);
+        notification.setTitle(format("Title of %s", type.name()));
+        notification.setBody(format("Body of %s", type.name()));
+        delay();
+        return notificationRepository.saveAndFlush(notification);
     }
 
     private String randomPictureUrl() {
