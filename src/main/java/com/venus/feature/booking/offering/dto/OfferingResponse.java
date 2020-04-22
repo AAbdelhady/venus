@@ -6,5 +6,6 @@ import lombok.Data;
 
 @Data
 public class OfferingResponse {
+    private Long id;
     private LocalTime time;
 }

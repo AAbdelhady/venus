@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class CustomerResponse {
-
     @JsonUnwrapped
     private UserResponse user;
 }

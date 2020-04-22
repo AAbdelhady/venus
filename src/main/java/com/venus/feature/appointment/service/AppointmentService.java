@@ -1,6 +1,6 @@
 package com.venus.feature.appointment.service;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +14,8 @@ import com.venus.feature.appointment.mapper.AppointmentMapper;
 import com.venus.feature.appointment.repository.AppointmentRepository;
 import com.venus.feature.booking.core.entity.Booking;
 import com.venus.feature.booking.core.repository.BookingRepository;
+import com.venus.feature.booking.offering.entity.Offering;
+import com.venus.feature.booking.offering.repository.OfferingRepository;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.user.entity.User;
 
@@ -25,23 +27,26 @@ import lombok.RequiredArgsConstructor;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-
     private final BookingRepository bookingRepository;
-
+    private final OfferingRepository offeringRepository;
     private final AppointmentMapper appointmentMapper;
+    private final AppointmentNotificationHelper appointmentNotificationHelper;
 
     public AppointmentResponse createAppointment(AppointmentRequest request) {
         Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow(NotFoundException::new);
-        Appointment appointment = saveAppointment(booking, request.getAppointmentTime());
+        Offering offering = offeringRepository.findById(request.getOfferingId()).orElseThrow(NotFoundException::new);
+        Appointment appointment = saveAppointment(booking, offering);
         bookingRepository.deleteById(booking.getId());
+        appointmentNotificationHelper.addArtistAppointmentConfirmedNotification(appointment);
+        appointmentNotificationHelper.addCustomerAppointmentConfirmedNotification(appointment);
         return appointmentMapper.mapOne(appointment);
     }
 
-    private Appointment saveAppointment(Booking booking, OffsetDateTime appointmentTime) {
+    private Appointment saveAppointment(Booking booking, Offering offering) {
         Appointment appointment = new Appointment();
         appointment.setArtist(booking.getArtist());
         appointment.setCustomer(booking.getCustomer());
-        appointment.setAppointmentTime(appointmentTime);
+        appointment.setAppointmentTime(LocalDateTime.of(booking.getBookingDate(), offering.getTime()));
         return appointmentRepository.save(appointment);
     }
 

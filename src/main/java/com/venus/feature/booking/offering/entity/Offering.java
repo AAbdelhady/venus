@@ -40,7 +40,7 @@ public class Offering {
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
-    @Column(name = "time")
+    @Column(name = "time", nullable = false, updatable = false)
     private LocalTime time;
 
     @Column(name = "created", nullable = false, updatable = false)

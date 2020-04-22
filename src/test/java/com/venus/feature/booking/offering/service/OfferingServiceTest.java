@@ -30,7 +30,7 @@ public class OfferingServiceTest {
     private OfferingRepository offeringRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         offeringService = new OfferingService(offeringRepository);
         when(offeringRepository.saveAll(anyList())).then(saveAllAnswer());

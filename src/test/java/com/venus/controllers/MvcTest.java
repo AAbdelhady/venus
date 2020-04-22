@@ -5,20 +5,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.venus.exceptions.mapper.ExceptionMapper;
 import com.venus.exceptions.mapper.ExceptionMapperImpl;
 
 abstract class MvcTest {
 
-    MockMvc mockMvc;
+    protected static final ObjectMapper objectMapper = new ObjectMapper();
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    private ExceptionMapper exceptionMapper = new ExceptionMapperImpl();
+    protected MockMvc mockMvc;
 
     void init(Object controller) {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new RestControllerExceptionHandler(exceptionMapper))
+                .setControllerAdvice(new RestControllerExceptionHandler(new ExceptionMapperImpl()))
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
     }

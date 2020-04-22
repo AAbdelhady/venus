@@ -27,6 +27,10 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
 
+    public void addAppointmentNotification(User receiver, User sender, String title, String body, NotificationType type, Appointment appointment) {
+        addNotification(receiver, sender, title, body, type, null, appointment);
+    }
+
     public void addBookingNotification(User receiver, User sender, String title, String body, NotificationType type, Booking booking) {
         addNotification(receiver, sender, title, body, type, booking, null);
     }

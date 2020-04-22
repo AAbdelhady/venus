@@ -1,6 +1,6 @@
 package com.venus.feature.appointment.entity;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,5 +45,5 @@ public class Appointment extends AuditedEntity {
     private Artist artist;
 
     @Column(name = "appointment_time", nullable = false)
-    private OffsetDateTime appointmentTime;
+    private LocalDateTime appointmentTime;
 }

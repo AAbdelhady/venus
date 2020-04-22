@@ -11,6 +11,5 @@ import com.venus.feature.specialty.entity.Speciality;
 @Mapper(config = GlobalMapperConfig.class)
 public interface SpecialityMapper {
     SpecialityResponse mapOne(Speciality speciality);
-
     List<SpecialityResponse> mapList(List<Speciality> specialityList);
 }

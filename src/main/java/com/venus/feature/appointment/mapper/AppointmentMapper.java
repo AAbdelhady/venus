@@ -13,6 +13,5 @@ import com.venus.feature.customer.mapper.CustomerMapper;
 @Mapper(config = GlobalMapperConfig.class, uses = {ArtistMapper.class, CustomerMapper.class})
 public interface AppointmentMapper {
     AppointmentResponse mapOne(Appointment entity);
-
     List<AppointmentResponse> mapList(List<Appointment> entities);
 }

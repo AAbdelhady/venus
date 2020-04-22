@@ -67,10 +67,10 @@ public class Notification {
     private Instant created;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", updatable = false)
+    @JoinColumn(name = "booking_id")
     private Booking booking;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appointment_id", updatable = false)
+    @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 }

@@ -2,9 +2,9 @@ package com.venus.testutils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -18,7 +18,7 @@ import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.specialty.entity.Speciality;
 import com.venus.feature.user.entity.User;
 
-import static com.venus.testutils.DateUtils.dateToOffsetDateTime;
+import static com.venus.testutils.DateUtils.dateToLocalDateTime;
 import static com.venus.testutils.DateUtils.nowPlusDays;
 import static com.venus.testutils.RandomUtils.random;
 import static com.venus.testutils.RandomUtils.randomAlphabeticString;
@@ -88,6 +88,7 @@ public class UnitTestUtils {
         booking.setSpeciality(createDummySpeciality(artist));
         booking.setMessage(randomAlphabeticString(20));
         booking.setStatus(status);
+        booking.setBookingDate(LocalDate.now());
         return booking;
     }
 
@@ -96,7 +97,7 @@ public class UnitTestUtils {
     }
 
     public static Appointment createDummyAppointment(Artist artist, Customer customer) {
-        OffsetDateTime appointmentTime = dateToOffsetDateTime(nowPlusDays(random(1, 10)), ZoneOffset.UTC);
+        LocalDateTime appointmentTime = dateToLocalDateTime(nowPlusDays(random(1, 10)));
         Appointment appointment = new Appointment();
         appointment.setId(randomId());
         appointment.setArtist(artist);

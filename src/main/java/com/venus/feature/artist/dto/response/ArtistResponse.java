@@ -8,7 +8,6 @@ import lombok.Data;
 
 @Data
 public class ArtistResponse {
-
     @JsonUnwrapped
     private UserResponse user;
 

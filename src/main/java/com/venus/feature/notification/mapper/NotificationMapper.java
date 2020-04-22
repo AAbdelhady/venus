@@ -17,9 +17,7 @@ import com.venus.util.MapperUtils;
 @Mapper(config = GlobalMapperConfig.class, uses = {UserMapper.class, BookingMapper.class, AppointmentMapper.class})
 public interface NotificationMapper {
     NotificationResponse mapOne(Notification notification);
-
     List<NotificationResponse> mapList(List<Notification> notificationList);
-
     default PageResponse<NotificationResponse> mapPage(Page<Notification> notificationPage) {
         return MapperUtils.mapPage(notificationPage, this::mapList);
     }

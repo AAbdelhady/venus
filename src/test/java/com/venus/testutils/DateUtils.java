@@ -1,14 +1,14 @@
 package com.venus.testutils;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
 
-    public static OffsetDateTime dateToOffsetDateTime(Date date, ZoneOffset offset) {
-        return date.toInstant().atOffset(offset);
+    public static LocalDateTime dateToLocalDateTime(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
     }
 
     public static Date nowPlusDays(int seconds) {
