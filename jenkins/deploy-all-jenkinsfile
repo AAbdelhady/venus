@@ -12,16 +12,15 @@ pipeline {
                 sh 'ssh -t ${remoteHost} "docker-compose -f ${composeFileLocation} down"'
              }
         }
-        stage('Clean old local images') {
+        stage('Cleanup Local Docker Images') {
             steps {
                 sh 'docker rmi -f $(docker images aabdelhady/venus-backend -q)'
                 sh 'docker rmi -f $(docker images aabdelhady/venus-webapp -q)'
             }
         }
-        stage('Copy Scripts') {
+        stage('Copy Docker Compose File') {
             steps {
                 sh 'scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}'
-                sh 'scp docker/nginx/nginx.conf ${remoteHost}:/home/nginx/nginx.conf'
              }
         }
         stage('Docker Compose Up') {
