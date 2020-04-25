@@ -21,14 +21,14 @@ pipeline {
         }
         stage('Update Nginx Conf File') {
             steps {
-                sh 'mv ${remoteHost}:${nginxFileLocation} ${remoteHost}:${nginxFileLocation}.bk'
+                sh 'ssh -t ${remoteHost} "mv ${remoteHost}:${nginxFileLocation} ${remoteHost}:${nginxFileLocation}.bk"'
                 sh 'scp docker/nginx/nginx.conf ${remoteHost}:${nginxFileLocation}'
                 sh 'systemctl reload nginx'
             }
         }
         stage('Update Docker Compose File') {
             steps {
-                sh 'mv ${remoteHost}:${composeFileLocation} ${remoteHost}:${composeFileLocation}.bk'
+                sh 'ssh -t ${remoteHost} mv ${remoteHost}:${composeFileLocation} ${remoteHost}:${composeFileLocation}.bk"'
                 sh 'scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}'
              }
         }
