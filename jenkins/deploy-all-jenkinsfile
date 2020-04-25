@@ -3,7 +3,6 @@ pipeline {
         remoteHost = 'root@172.105.69.29'
         composeFileLocation = '/home/docker-compose.yml'
         nginxFileLocation = '/etc/nginx/nginx.conf'
-        currentTimestamp = date "+%Y%m%d"
     }
 
     agent any
@@ -22,14 +21,14 @@ pipeline {
         }
         stage('Update Nginx Conf File') {
             steps {
-                sh '${remoteHost}:${nginxFileLocation} ${remoteHost}:${nginxFileLocation}.${currentTimestamp}.bk'
+                sh '${remoteHost}:${nginxFileLocation} ${remoteHost}:${nginxFileLocation}.bk'
                 sh 'scp docker/nginx/nginx.conf ${remoteHost}:${nginxFileLocation}'
                 sh 'systemctl reload nginx'
             }
         }
         stage('Update Docker Compose File') {
             steps {
-                sh '${remoteHost}:${composeFileLocation} scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}.${currentTimestamp}.bk'
+                sh '${remoteHost}:${composeFileLocation} ${remoteHost}:${composeFileLocation}.bk'
                 sh 'scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}'
              }
         }
