@@ -2,6 +2,7 @@ package com.venus.feature.notification.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class NotificationService {
     private final UserService userService;
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public void addAppointmentNotification(User receiver, User sender, String title, String body, NotificationType type, Appointment appointment) {
         addNotification(receiver, sender, title, body, type, null, appointment);
@@ -41,12 +43,18 @@ public class NotificationService {
                 .booking(booking).appointment(appointment)
                 .title(title).body(body)
                 .type(type).build();
-        notificationRepository.save(notification);
+        notification = notificationRepository.save(notification);
+        pushNotification(notification);
     }
 
     public PageResponse<NotificationResponse> getMyNotifications(Pageable pageable) {
         User authorizedUser = userService.findAuthorizedUser();
         Page<Notification> page = notificationRepository.findByReceiverIdOrderByCreatedDesc(authorizedUser.getId(), pageable);
         return notificationMapper.mapPage(page);
+    }
+
+    private void pushNotification(Notification notification) {
+        NotificationResponse payload = notificationMapper.mapOne(notification);
+        messagingTemplate.convertAndSendToUser(notification.getReceiver().getId().toString(), "/queue/notification", payload);
     }
 }

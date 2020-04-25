@@ -1,8 +1,10 @@
 package com.venus.feature.booking.core.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -67,6 +69,6 @@ public class Booking extends AuditedEntity {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "booking", orphanRemoval = true)
-    private List<Offering> offerings;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Offering> offerings = new ArrayList<>();
 }

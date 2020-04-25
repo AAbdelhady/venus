@@ -4,16 +4,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpUser;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.venus.exceptions.BadRequestException;
 import com.venus.exceptions.ForbiddenException;
 import com.venus.exceptions.NotFoundException;
 import com.venus.feature.artist.dto.response.ArtistResponse;
@@ -32,6 +38,8 @@ public class TestController {
 
     private final DummyArtistService dummyArtistService;
     private final ArtistMapper artistMapper;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final SimpUserRegistry simpUserRegistry;
 
     @GetMapping
     public String test() {
@@ -73,5 +81,18 @@ public class TestController {
     @GetMapping("artist")
     public List<ArtistResponse> insertRandomArtists(@RequestParam(value = "count", defaultValue = "20") int count) {
         return artistMapper.mapList(dummyArtistService.insertDummyArtists(count));
+    }
+
+    @GetMapping("websocket/{userId}")
+    public void websocketTest(@PathVariable Long userId) {
+        if (simpUserRegistry.getUser(userId.toString()) == null) {
+            throw new BadRequestException("User is not online");
+        }
+        messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/tst", "Testing WS");
+    }
+
+    @GetMapping("websocket/count")
+    public Set<SimpUser> websocketTest() {
+        return simpUserRegistry.getUsers();
     }
 }

@@ -15,7 +15,6 @@ import com.venus.feature.appointment.repository.AppointmentRepository;
 import com.venus.feature.booking.core.entity.Booking;
 import com.venus.feature.booking.core.repository.BookingRepository;
 import com.venus.feature.booking.offering.entity.Offering;
-import com.venus.feature.booking.offering.repository.OfferingRepository;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.user.entity.User;
 
@@ -28,18 +27,22 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final BookingRepository bookingRepository;
-    private final OfferingRepository offeringRepository;
     private final AppointmentMapper appointmentMapper;
     private final AppointmentNotificationHelper appointmentNotificationHelper;
 
     public AppointmentResponse createAppointment(AppointmentRequest request) {
         Booking booking = bookingRepository.findById(request.getBookingId()).orElseThrow(NotFoundException::new);
-        Offering offering = offeringRepository.findById(request.getOfferingId()).orElseThrow(NotFoundException::new);
+        Offering offering = findBookingOfferingById(booking, request.getOfferingId());
         Appointment appointment = saveAppointment(booking, offering);
         bookingRepository.deleteById(booking.getId());
         appointmentNotificationHelper.addArtistAppointmentConfirmedNotification(appointment);
         appointmentNotificationHelper.addCustomerAppointmentConfirmedNotification(appointment);
         return appointmentMapper.mapOne(appointment);
+    }
+
+    public List<AppointmentResponse> listAppointmentsByUser(User user) {
+        List<Appointment> appointments = user.getRole() == Role.ARTIST ? appointmentRepository.findAllByArtistId(user.getId()) : appointmentRepository.findAllByCustomerId(user.getId());
+        return appointmentMapper.mapList(appointments);
     }
 
     private Appointment saveAppointment(Booking booking, Offering offering) {
@@ -50,8 +53,10 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-    public List<AppointmentResponse> listAppointmentsByUser(User user) {
-        List<Appointment> appointments = user.getRole() == Role.ARTIST ? appointmentRepository.findAllByArtistId(user.getId()) : appointmentRepository.findAllByCustomerId(user.getId());
-        return appointmentMapper.mapList(appointments);
+    private Offering findBookingOfferingById(Booking booking, Long offeringId) {
+        return booking.getOfferings().stream()
+                .filter(o -> o.getId().equals(offeringId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 }

@@ -16,6 +16,7 @@ import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.artist.entity.Category;
 import com.venus.feature.artist.repository.ArtistRepository;
 import com.venus.feature.booking.core.entity.Booking;
+import com.venus.feature.booking.core.entity.BookingStatus;
 import com.venus.feature.booking.core.repository.BookingRepository;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
@@ -130,16 +131,21 @@ public abstract class IntegrationTest {
 
     protected Booking createBooking(Artist artist, Customer customer) {
         Speciality speciality = createSpeciality(artist);
-        return createBooking(artist, customer, speciality);
+        return createBooking(artist, customer, speciality, randomBookingStatus());
     }
 
-    protected Booking createBooking(Artist artist, Customer customer, Speciality speciality) {
+    protected Booking createBooking(Artist artist, Customer customer, BookingStatus status) {
+        Speciality speciality = createSpeciality(artist);
+        return createBooking(artist, customer, speciality, status);
+    }
+
+    protected Booking createBooking(Artist artist, Customer customer, Speciality speciality, BookingStatus status) {
         Booking booking = new Booking();
         booking.setArtist(artist);
         booking.setCustomer(customer);
         booking.setMessage(randomAlphabeticString(20));
         booking.setBookingDate(LocalDate.now());
-        booking.setStatus(randomBookingStatus());
+        booking.setStatus(status);
         booking.setSpeciality(speciality);
         delay();
         return bookingRepository.saveAndFlush(booking);

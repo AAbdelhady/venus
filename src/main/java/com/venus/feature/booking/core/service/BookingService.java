@@ -2,6 +2,7 @@ package com.venus.feature.booking.core.service;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import com.venus.feature.booking.core.entity.Booking;
 import com.venus.feature.booking.core.entity.BookingStatus;
 import com.venus.feature.booking.core.mapper.BookingMapper;
 import com.venus.feature.booking.core.repository.BookingRepository;
-import com.venus.feature.booking.offering.service.OfferingService;
+import com.venus.feature.booking.offering.entity.Offering;
 import com.venus.feature.common.enums.Role;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.customer.repository.CustomerRepository;
@@ -33,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 public class BookingService {
 
     private final UserService userService;
-    private final OfferingService offeringService;
     private final BookingRepository bookingRepository;
     private final ArtistRepository artistRepository;
     private final CustomerRepository customerRepository;
@@ -71,8 +71,8 @@ public class BookingService {
     public void addOffersToBooking(Long bookingId, List<LocalTime> offeredTimes) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(NotFoundException::new);
         assertBookingNew(booking);
-        offeringService.createOfferings(booking, offeredTimes);
         booking.setStatus(BookingStatus.OFFERED);
+        booking.getOfferings().addAll(prepareOfferings(booking, offeredTimes));
         booking = bookingRepository.save(booking);
         notificationHelper.addNewOffersNotification(booking);
     }
@@ -81,5 +81,9 @@ public class BookingService {
         if (booking.getStatus() != BookingStatus.NEW) {
             throw new BadRequestException("Offers have already been made to this booking!");
         }
+    }
+
+    private List<Offering> prepareOfferings(Booking booking, List<LocalTime> offeredTimes) {
+        return offeredTimes.stream().map(t -> new Offering(booking, t)).collect(Collectors.toList());
     }
 }

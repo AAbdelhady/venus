@@ -21,7 +21,6 @@ import com.venus.feature.artist.entity.Artist;
 import com.venus.feature.booking.core.entity.Booking;
 import com.venus.feature.booking.core.repository.BookingRepository;
 import com.venus.feature.booking.offering.entity.Offering;
-import com.venus.feature.booking.offering.repository.OfferingRepository;
 import com.venus.feature.customer.entity.Customer;
 
 import static com.venus.testutils.AssertionUtils.assertAppointmentEqualsResponse;
@@ -48,14 +47,12 @@ public class AppointmentServiceTest {
     @Mock
     private BookingRepository bookingRepository;
     @Mock
-    private OfferingRepository offeringRepository;
-    @Mock
     private AppointmentNotificationHelper appointmentNotificationHelper;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new AppointmentService(appointmentRepository, bookingRepository, offeringRepository, appointmentMapper, appointmentNotificationHelper);
+        service = new AppointmentService(appointmentRepository, bookingRepository, appointmentMapper, appointmentNotificationHelper);
     }
 
     @Test
@@ -66,9 +63,9 @@ public class AppointmentServiceTest {
 
         Booking booking = createDummyBooking(artist, customer);
         Offering offering = createDummyOffering(booking);
+        booking.getOfferings().add(offering);
 
         when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
-        when(offeringRepository.findById(offering.getId())).thenReturn(Optional.of(offering));
         when(appointmentRepository.save(isA(Appointment.class))).then(saveAppointmentAnswer());
 
         AppointmentRequest request = new AppointmentRequest();

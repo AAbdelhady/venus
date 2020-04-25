@@ -22,7 +22,6 @@ import com.venus.feature.booking.core.dto.BookingResponse;
 import com.venus.feature.booking.core.entity.Booking;
 import com.venus.feature.booking.core.entity.BookingStatus;
 import com.venus.feature.booking.core.repository.BookingRepository;
-import com.venus.feature.booking.offering.service.OfferingService;
 import com.venus.feature.customer.entity.Customer;
 import com.venus.feature.customer.repository.CustomerRepository;
 import com.venus.feature.specialty.entity.Speciality;
@@ -47,8 +46,6 @@ public class BookingServiceTest {
     @Mock
     private UserService userService;
     @Mock
-    private OfferingService offeringService;
-    @Mock
     private BookingRepository bookingRepository;
     @Mock
     private ArtistRepository artistRepository;
@@ -62,7 +59,7 @@ public class BookingServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new BookingService(userService, offeringService, bookingRepository, artistRepository, customerRepository, specialityRepository, bookingMapper, notificationHelper);
+        service = new BookingService(userService, bookingRepository, artistRepository, customerRepository, specialityRepository, bookingMapper, notificationHelper);
     }
 
     @Test
@@ -185,19 +182,19 @@ public class BookingServiceTest {
     public void addOffersToBooking_shouldInvokeOfferingServiceAndChangeStatus() {
         // given
         Booking booking = createDummyBooking(BookingStatus.NEW);
-        List<LocalTime> offeredTimes = Collections.singletonList(LocalTime.now());
+        LocalTime offeredTime = LocalTime.now();
 
         when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
 
         // when
-        service.addOffersToBooking(booking.getId(), offeredTimes);
+        service.addOffersToBooking(booking.getId(), Collections.singletonList(offeredTime));
 
         // then
-        verify(offeringService).createOfferings(booking, offeredTimes);
-
         ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
         verify(bookingRepository).save(captor.capture());
         assertEquals(BookingStatus.OFFERED, captor.getValue().getStatus());
+        assertEquals(1, captor.getValue().getOfferings().size());
+        assertEquals(offeredTime, captor.getValue().getOfferings().get(0).getTime());
     }
 
     @Test(expected = BadRequestException.class)
