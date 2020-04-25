@@ -15,15 +15,15 @@ pipeline {
         }
         stage('Cleanup Local Docker Images') {
             steps {
-                sh 'docker rmi -f $(docker images aabdelhady/venus-backend -q)'
-                sh 'docker rmi -f $(docker images aabdelhady/venus-webapp -q)'
+                sh 'ssh -t ${remoteHost} "docker rmi -f $(docker images aabdelhady/venus-backend -q)"'
+                sh 'ssh -t ${remoteHost} "docker rmi -f $(docker images aabdelhady/venus-webapp -q)"'
             }
         }
         stage('Update Nginx Conf File') {
             steps {
                 sh 'ssh -t ${remoteHost} "mv ${nginxFileLocation} ${nginxFileLocation}.bk"'
                 sh 'scp docker/nginx/nginx.conf ${remoteHost}:${nginxFileLocation}'
-                sh 'systemctl reload nginx'
+                sh 'ssh -t ${remoteHost} "systemctl reload nginx"'
             }
         }
         stage('Update Docker Compose File') {
