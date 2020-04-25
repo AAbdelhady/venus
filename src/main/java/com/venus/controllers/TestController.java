@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,8 +91,8 @@ public class TestController {
         messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/tst", "Testing WS");
     }
 
-    @GetMapping("websocket/count")
-    public Set<SimpUser> websocketTest() {
-        return simpUserRegistry.getUsers();
+    @GetMapping("websocket/active")
+    public List<String> websocketTest() {
+        return simpUserRegistry.getUsers().stream().map(SimpUser::getName).collect(Collectors.toList());
     }
 }
