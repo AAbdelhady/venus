@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Update Docker Compose File') {
             steps {
-                sh 'ssh -t ${remoteHost} mv ${composeFileLocation} ${composeFileLocation}.bk"'
+                sh 'ssh -t ${remoteHost} "mv ${composeFileLocation} ${composeFileLocation}.bk"'
                 sh 'scp docker/docker-compose.yml ${remoteHost}:${composeFileLocation}'
              }
         }
