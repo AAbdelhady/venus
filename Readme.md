@@ -1,4 +1,4 @@
-NB! This is discontinued project of mine. This repository was maintained on bitbucket and was migrated to github. 
+NB! This is discontinued incomplete project of mine. This repository was maintained on bitbucket and was migrated to github. 
 
 ## Administration Guidelines
 
